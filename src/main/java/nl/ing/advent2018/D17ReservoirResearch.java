@@ -4,10 +4,7 @@ import nl.ing.advent.util.FileReader;
 import nl.ing.advent2018.domain.Soil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import static nl.ing.advent.util.LogWriter.newLine;
 
 public class D17ReservoirResearch {
 
@@ -15,20 +12,46 @@ public class D17ReservoirResearch {
     private char[][] reservoir;
     private int fountainPosition;
 
-    public int capacity(String fileName) {
+    private int height;
+    private int width;
+    private int minY;
+    private boolean timeToBreak;
+
+    public int capacity(String fileName, boolean onlyWater) {
+        timeToBreak = false;
         init(fileName);
         //display();
-        newLine();
-        openTap();
+        for (int loop = 0; loop < 48; loop++) {
+            if (timeToBreak) {
+                break;
+            }
+            down(fountainPosition, 1);
+            //display();
+        }
+        System.out.println();
         display();
-        return -1;
-
+        int waterCapacity = 0;
+        int pipes = 0;
+        for (int i = 0; i < width; i++) {
+            for (int j = minY; j < height; j++) {
+                if (reservoir[j][i] == '~') {
+                    waterCapacity++;
+                } else if (reservoir[j][i] == '|') {
+                    pipes ++;
+                }
+            }
+        }
+        if (onlyWater) {
+            return waterCapacity;
+        } else {
+            return waterCapacity + pipes;
+        }
     }
 
     private void init(String fileName) {
         List<String> lines = FileReader.readFile(fileName);
         int minX = Integer.MAX_VALUE;
-        int minY = Integer.MAX_VALUE;
+        minY = Integer.MAX_VALUE;
         int maxX = 0;
         int maxY = 0;
         soilList = new ArrayList<>();
@@ -48,9 +71,12 @@ public class D17ReservoirResearch {
                 maxY = soil.getEndY();
             }
         }
-        System.out.println("minX " + minX + " minY" + minY + " maxX " + maxX + " maxY " + maxY);
-        int height = maxY + 1;
-        int width = maxX - minX + 1;
+        height = maxY + 1;
+        minX--;
+        maxX++;
+        width = maxX - minX + 1;
+        System.out.println("minX " + minX + " minY " + minY + " maxX " + maxX + " maxY " + maxY + " height " + height + " width " + width);
+
         reservoir = new char[height][width];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -72,15 +98,85 @@ public class D17ReservoirResearch {
     }
 
     private void display() {
-        for (char[] aReservoir : reservoir) {
-            System.out.println(aReservoir);
+        for (int j = 0; j < height; j++) {
+            for (int i = 0; i < width; i++) {
+                System.out.print(reservoir[j][i]);
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+    private void down(int x, int y) {
+        while (y < height && reservoir[y][x] != '#' && reservoir[y][x] != '~') {
+            reservoir[y ++][x] = '|';
+            if (y == height) {
+                timeToBreak = true;
+                return;
+            }
+        }
+        --y;
+        fillWater(x, y);
+        left(x, y);
+        right(x, y);
+    }
+
+    private void left(int x, int y) {
+        while (x >= 0 && reservoir[y][x] != '#' && reservoir[y][x] != '~') {
+            //porous, go down
+            if (reservoir[y + 1][x] == '.' || reservoir[y + 1][x] == '|') {
+                down(x, y);
+                return;
+            } else {
+                reservoir[y][x -- ] = '|';
+            }
         }
     }
 
-    private void openTap() {
-        int y = 1;
-        while (reservoir[y][fountainPosition] != '#') {
-            reservoir[y ++][fountainPosition] = '|';
+    private void fillWater(int x, int y) {
+        //Found a clay, so lets fill water here if there is a clay on the right side and bottom too
+        int leftClay = 0;
+        int rightClay = 0;
+        if (x > 0) {
+            for (int i = x; i < width; i++) {
+                if (reservoir[y + 1][i] != '#' && reservoir[y + 1][i] != '~') {
+                    //Bottom clay not found
+                    return;
+                }
+                if (reservoir[y][i] == '#') {
+                    rightClay = i;
+                    break;
+                }
+            }
+        }
+
+        if (x < width) {
+            for (int i = x; i > 0; i--) {
+                if (reservoir[y + 1][i] != '#' && reservoir[y + 1][i] != '~') {
+                    //Bottom clay not found
+                    return;
+                }
+                if (reservoir[y][i] == '#') {
+                    leftClay = i;
+                    break;
+                }
+            }
+        }
+
+        for (int i = leftClay + 1; i < rightClay; i++) {
+            reservoir[y][i] = '~';
+        }
+    }
+
+    private void right(int x, int y) {
+        while (x < width && reservoir[y][x] != '#' && reservoir[y][x] != '~') {
+            //porous, go down
+            if (reservoir[y + 1][x] == '.' || reservoir[y + 1][x] == '|') {
+                down(x, y);
+                return;
+            } else {
+                reservoir[y][x ++ ] = '|';
+            }
         }
     }
 

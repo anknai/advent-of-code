@@ -16,9 +16,14 @@ public class D17ReservoirResearchTest {
 
     @Test
     public void capacity() {
-        int capacity = research.capacity(TEST_INPUT);
-        //capacity = research.capacity(INPUT);
-        assertEquals("Reservoir capacity is ", 67, capacity);
+        int capacity = research.capacity(TEST_INPUT, false);
+        assertEquals("Reservoir capacity is ", 57, capacity);
+        capacity = research.capacity(INPUT, false);
+        assertEquals("Reservoir capacity is ", 41027, capacity);
+        capacity = research.capacity(TEST_INPUT, true);
+        assertEquals("Reservoir capacity is ", 29, capacity);
+        capacity = research.capacity(INPUT, true);
+        assertEquals("Reservoir capacity is ", 34214, capacity);
     }
 
     @Test
