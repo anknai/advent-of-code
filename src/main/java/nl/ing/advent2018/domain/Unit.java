@@ -5,9 +5,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.TreeSet;
 
 @Getter
 @Setter
@@ -19,7 +19,13 @@ public class Unit implements Comparable<Unit> {
 
     @Override
     public int compareTo(Unit other) {
-        return this.point.compareTo(other.point);
+        if (this.getHitPoint() > other.getHitPoint()) {
+            return 1;
+        } else if (this.getHitPoint() < other.getHitPoint()) {
+            return -1;
+        } else {
+            return this.point.compareTo(other.point);
+        }
     }
 
     public Point.PointType getType() {
@@ -38,13 +44,23 @@ public class Unit implements Comparable<Unit> {
 
     public Optional<Unit> getAdjacentEnemy(List<Unit> units) {
         Point current = this.getPoint();
+        TreeSet<Unit> adjacentEnemies = new TreeSet<>();
         for (Unit unit: units) {
             if (current.isAdjacent(unit.getPoint())) {
                 if (current.getType() != unit.getType()) {
-                    return Optional.of(unit);
+                    adjacentEnemies.add(unit);
                 }
             }
         }
-        return Optional.empty();
+
+        if (adjacentEnemies.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(adjacentEnemies.first());
+        }
+    }
+
+    public void getHit(int attackPower) {
+        this.hitPoint -= attackPower;
     }
 }

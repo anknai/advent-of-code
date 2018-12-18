@@ -17,17 +17,45 @@ public class D15BeverageBandits {
 
     private List<Point> points;
 
+    private boolean targetFound;
+
+    private int round;
+
     public int score(String fileName) {
         units = init(fileName);
-        for (int i = 0; i < 3; i++) {
-            System.out.println("Round  " + (i + 1));
-            for (Unit unit : units) {
-                takeTurn(unit);
+        round = 0;
+        targetFound = true;
+        while (targetFound){
+            targetFound = false;
+            round++;
+            for (int unitIndex = 0; unitIndex < units.size(); unitIndex ++) {
+                Optional<Unit> diedOptional = takeTurn(units.get(unitIndex));
+                if (diedOptional.isPresent()) {
+                    Unit died = diedOptional.get();
+                    for (int k = 0; k < unitIndex; k++) {
+                        //if the unit died is before the current element, move everything up
+                        if (units.get(k) == died) {
+                            unitIndex--;
+                            break;
+                        }
+                    }
+                    units.remove(died);
+                    display();
+                }
             }
+
             Collections.sort(units);
         }
-        //takeTurn(units.get(3));
-        return -1;
+
+        int sum = 0;
+        for (Unit unit: units) {
+            System.out.println(unit);
+            sum += unit.getHitPoint();
+        }
+        --round;
+        System.out.println("Sum of hit power " + sum + " round number " + round);
+        display();
+        return sum * round;
     }
 
     private List<Unit> init(String fileName) {
@@ -67,35 +95,31 @@ public class D15BeverageBandits {
         return units;
     }
 
-    private void takeTurn(Unit unit) {
+    private Optional<Unit> takeTurn(Unit unit) {
         Optional<Unit> adjacentEnemy = unit.getAdjacentEnemy(units);
         if (adjacentEnemy.isPresent()) {
-            System.out.println("Adjacent enemy found for " + unit);
-            attack();
-            return;
+            targetFound = true;
+            return attack(unit, adjacentEnemy.get());
+        } else {
+            return moveAndAttack(unit);
         }
-        move(unit);
-
     }
 
-    private void move(Unit unit) {
-        System.out.println("Finding closest enemy for " + unit);
+    private Optional<Unit> moveAndAttack(Unit unit) {
         //Reset the distance every time
         for (Point point : points) {
             point.setDistance(Integer.MAX_VALUE);
             point.setShortestPath(new LinkedList<>());
-            point.setAdjacentNodes(new HashMap<>());
+            point.setAdjacentNodes(new TreeMap<>());
         }
         Point current = unit.getPoint();
         for (Point point : points) {
             if (current.isAdjacent(point)) {
-                //System.out.println("Adding " + current + " to adjacent of " + point);
                 current.addDestination(point, 1);
             }
             for (Point other : points) {
                 if (other != point) {
                     if (point.isAdjacent(other)) {
-                        //System.out.println("Adding " + point + " to adjacent of " + other);
                         point.addDestination(other, 1);
                     }
                 }
@@ -108,7 +132,6 @@ public class D15BeverageBandits {
             if (unit.getType() == enemy.getType()) {
                 continue;
             }
-            //System.out.println("Enemy found at " + enemy);
             adjacents.addAll(enemy.getAdjacent(points));
         }
 
@@ -119,36 +142,51 @@ public class D15BeverageBandits {
                 min = adj.getDistance();
                 closest = adj;
             }
-            //System.out.println(adj);
         }
 
-        current.setAdjacentNodes(new HashMap<>());
+        current.setAdjacentNodes(new TreeMap<>());
         current.setShortestPath(new LinkedList<>());
         current.setDistance(Integer.MAX_VALUE);
 
+        //Found something
         if (null != closest) {
-            //System.out.println("The closest point is " + closest);
-            Point shortest = closest.getShortestPath().removeFirst();
+            //Remove the first one
+            closest.getShortestPath().removeFirst();
+            Point shortest;
             if (!closest.getShortestPath().isEmpty()) {
                 shortest = closest.getShortestPath().removeFirst();
             } else {
                 shortest = closest;
             }
-            System.out.println("Shortest is via " + shortest);
             Point.PointType elfOrGob = current.getType();
             unit.setPoint(shortest);
             shortest.setType(elfOrGob);
+            shortest.setAdjacentNodes(new TreeMap<>());
+            shortest.setShortestPath(new LinkedList<>());
             current.setType(Point.PointType.OPEN);
             points.remove(shortest);
             points.add(current);
             battleground[current.getY()][current.getX()] = Point.PointType.OPEN.getType();
             battleground[shortest.getY()][shortest.getX()] = elfOrGob.getType();
-            display();
+            Optional<Unit> adjacentEnemy = unit.getAdjacentEnemy(units);
+            targetFound = true;
+            if (adjacentEnemy.isPresent()) {
+                return attack(unit, adjacentEnemy.get());
+            }
         }
+        return Optional.empty();
     }
 
-    private void attack() {
-
+    private Optional<Unit> attack(Unit attacker, Unit enemy) {
+        //System.out.println(attacker + " is attacking " + enemy);
+        enemy.getHit(attacker.getAttackPower());
+        if (enemy.getHitPoint() <= 0) {
+            System.out.println("Enemy " + enemy + " died in round " + round);
+            points.add(enemy.getPoint());
+            battleground[enemy.getPoint().getY()][enemy.getPoint().getX()] = Point.PointType.OPEN.getType();
+            return Optional.of(enemy);
+        }
+        return Optional.empty();
     }
 
     private void display() {

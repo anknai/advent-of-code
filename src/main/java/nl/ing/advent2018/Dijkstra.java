@@ -2,7 +2,7 @@ package nl.ing.advent2018;
 
 import nl.ing.advent2018.domain.Point;
 
-import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
@@ -12,8 +12,8 @@ public class Dijkstra {
 
         source.setDistance(0);
 
-        Set<Point> settledPoints = new HashSet<>();
-        Set<Point> unsettledPoints = new HashSet<>();
+        Set<Point> settledPoints = new TreeSet<>();
+        Set<Point> unsettledPoints = new TreeSet<>();
         unsettledPoints.add(source);
 
         while (unsettledPoints.size() != 0) {

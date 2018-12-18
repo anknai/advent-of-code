@@ -4,13 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.TreeMap;
 
 @Getter
 @Setter
-@ToString(exclude = {"shortestPath", "adjacentNodes"})
+@ToString(exclude = {"shortestPath", "adjacentNodes", "distance"})
 public class Point implements Comparable<Point> {
 
     private int x;
@@ -23,7 +23,7 @@ public class Point implements Comparable<Point> {
 
     private Integer distance = Integer.MAX_VALUE;
 
-    private Map<Point, Integer> adjacentNodes = new HashMap<>();
+    private Map<Point, Integer> adjacentNodes = new TreeMap<>();
 
     @Override
     public int compareTo(Point other) {
