@@ -13,6 +13,7 @@ import java.util.TreeSet;
 @Setter
 @ToString
 public class Unit implements Comparable<Unit> {
+    private String name;
     private Point point;
     private int hitPoint = 200;
     private int attackPower = 3;
@@ -43,7 +44,9 @@ public class Unit implements Comparable<Unit> {
         for (Unit unit: units) {
             if (current.isAdjacent(unit.getPoint())) {
                 if (current.getType() != unit.getType()) {
-                    if (unit.getHitPoint() < hitpoint) {
+                    if (unit.getHitPoint() == hitpoint && unit.compareTo(enemy) < 0) {
+                        enemy = unit;
+                    } else if (unit.getHitPoint() < hitpoint) {
                         hitpoint = unit.getHitPoint();
                         enemy = unit;
                     }

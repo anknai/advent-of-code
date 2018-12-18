@@ -41,11 +41,8 @@ public class Point implements Comparable<Point> {
             return true;
         }
 
-        if (Math.abs(other.getX() - this.getX()) == 0 && Math.abs(other.getY() - this.getY()) == 1) {
-            return true;
-        }
+        return Math.abs(other.getX() - this.getX()) == 0 && Math.abs(other.getY() - this.getY()) == 1;
 
-        return false;
     }
 
     public void addDestination(Point destination, int distance) {
@@ -53,14 +50,13 @@ public class Point implements Comparable<Point> {
     }
 
     public enum PointType {
-        WALL('#'),
         OPEN('.'),
         ELF('E'),
         GOBLIN('G');
 
         private char type;
 
-        private PointType(char type) {
+        PointType(char type) {
             this.type = type;
         }
 

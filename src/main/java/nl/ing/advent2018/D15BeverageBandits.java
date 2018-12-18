@@ -75,6 +75,8 @@ public class D15BeverageBandits {
         battleground = new char[height][width];
         units = new ArrayList<>();
         points = new ArrayList<>();
+        int goblins = 0;
+        int elves = 0;
         for (int i = 0; i < strings.size(); i++) {
             String s = strings.get(i);
             battleground[i] = s.toCharArray();
@@ -90,9 +92,11 @@ public class D15BeverageBandits {
                     unit.setPoint(point);
                     if (s.charAt(j) == 'E') {
                         point.setType(Point.PointType.ELF);
+                        unit.setName("E" + ++elves);
                         //unit.setAttackPower(25);
                     } else {
                         point.setType(Point.PointType.GOBLIN);
+                        unit.setName("G" + ++goblins);
                     }
                     units.add(unit);
                     log(unit.toString());
