@@ -15,6 +15,7 @@ public class D16ChronalClassificationTest {
 
     private static final String TEST_INPUT = "16_test.txt";
     private static final String INPUT = "16_class.txt";
+    private static final String INPUT_2 = "16_part_2.txt";
 
     @Test
     public void threeOrMore() {
@@ -41,5 +42,12 @@ public class D16ChronalClassificationTest {
         for (Register register: registers) {
             System.out.println(register);
         }
+    }
+
+    @Test
+    public void part2() {
+        int i = classification.part2(INPUT_2);
+        assertEquals("Value is ", 575, i);
+
     }
 }

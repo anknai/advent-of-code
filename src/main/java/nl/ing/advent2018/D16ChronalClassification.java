@@ -5,15 +5,12 @@ import nl.ing.advent2018.domain.Instruction;
 import nl.ing.advent2018.domain.Register;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 public class D16ChronalClassification {
-
-    private List<Instruction> instructionList;
 
     private List<Set<String>> scores;
 
@@ -89,6 +86,10 @@ public class D16ChronalClassification {
             match.add("addi");
             count++;
         }
+        if (cValue == registerImmediate(aRegister, b, c, "mul")) {
+            match.add("muli");
+            count++;
+        }
         if (cValue == registerImmediate(aRegister, b, c, "ban")) {
             match.add("bani");
             count++;
@@ -160,6 +161,7 @@ public class D16ChronalClassification {
                 .number(Integer.parseInt(split[3]))
                 .build();
         instruction.setC(register);
+        //System.out.println(instruction);
         return instruction;
     }
 
@@ -292,5 +294,96 @@ public class D16ChronalClassification {
         register.setValue(value);
         //System.out.println(type + "r " + register);
         return value;
+    }
+
+    public int part2(String fileName) {
+        List<String> lines = FileReader.readFile(fileName);
+        List<Register> registers = parseRegister("After:  [2, 0, 0, 3]");
+        for (String line : lines) {
+            Instruction instruction = parse(line);
+            instruction.setBeforeList(registers);
+            registers = executePart2(instruction);
+        }
+
+        return registers.get(0).getValue();
+    }
+
+    private List<Register> executePart2(Instruction  instruction) {
+        int a = instruction.getA();
+        Register aRegister = instruction.getBeforeList().get(a);
+        int b = instruction.getB();
+        Register bRegister = instruction.getBeforeList().get(b);
+        Register cRegister = instruction.getC();
+        int c = cRegister.getNumber();
+        int cValue = 0;
+        switch (instruction.getOpcode()) {
+            case 0:
+                //0/ gtri
+                cValue = registerImmediate(aRegister, b, c, "gtr");
+                break;
+            case 1:
+                //1/   bani
+                cValue = registerImmediate(aRegister, b, c, "ban");
+                break;
+            case 2:
+                //2/ eqrr
+                cValue = register(aRegister, bRegister, c, "eqr");
+                break;
+            case 3:
+                //3/ gtir
+                cValue = immediateRegister(a, bRegister, c, "gt");
+                break;
+            case 4:
+                //4/ eqir
+                cValue = immediateRegister(a, bRegister, c, "eq");
+                break;
+            case 5:
+                //5/ bori
+                cValue = registerImmediate(aRegister, b, c, "bor");
+                break;
+            case 6:
+                //6/ seti
+                cValue = registerImmediate(aRegister, a, c, "set");
+                break;
+            case 7:
+                //7/ setr
+                cValue = register(aRegister, bRegister, c, "set");
+                break;
+            case 8:
+                //8/ addr
+                cValue = register(aRegister, bRegister, c, "add");
+                break;
+            case 9:
+                //9/ borr
+                cValue = register(aRegister, bRegister, c, "bor");
+                break;
+            case 10:
+                //10/ muli
+                cValue = registerImmediate(aRegister, b, c, "mul");
+                break;
+            case 11:
+                //11/ banr
+                cValue = register(aRegister, bRegister, c, "ban");
+                break;
+            case 12:
+                //12/ addi
+                cValue = registerImmediate(aRegister, b, c, "add");
+                break;
+            case 13:
+                //13/ eqri
+                cValue = registerImmediate(aRegister, b, c, "eqr");
+                break;
+            case 14:
+                //14/ mulr
+                cValue = register(aRegister, bRegister, c, "mul");
+                break;
+            case 15:
+                //15/gtrr
+                cValue = register(aRegister, bRegister, c, "gtr");
+                break;
+        }
+        cRegister.setValue(cValue);
+        instruction.getBeforeList().set(cRegister.getNumber(), cRegister);
+        return instruction.getBeforeList();
     }
 }
