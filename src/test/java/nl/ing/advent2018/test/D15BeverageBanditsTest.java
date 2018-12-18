@@ -14,22 +14,22 @@ public class D15BeverageBanditsTest {
 
     @Test
     public void score() {
-        int /*score = bandits.score(TEST_INPUT);
+        int score = bandits.score(TEST_INPUT);
         assertEquals("Score is ", 27730, score);
         score = bandits.score(TEST_INPUT_2);
-        assertEquals("Score is ", 29317, score);*/
-        /*score = bandits.score("15_test_3.txt");
-        assertEquals("Score is ", 37430, score);*/
+        assertEquals("Score is ", 27828, score);
+        score = bandits.score("15_test_3.txt");
+        assertEquals("Score is ", 36334, score);
         score = bandits.score("15_test_4.txt");
         assertEquals("Score is ", 39514, score);
-        /*score = bandits.score("15_test_5.txt");
-        assertEquals("Score is ", 28440, score);*/
-        /*score = bandits.score("15_test_6.txt");
-        assertEquals("Score is ", 28944, score);*/
-        /*score = bandits.score("15_test_7.txt");
-        assertEquals("Score is ", 18740, score);*/
-        /*score = bandits.score(INPUT);
-        assertEquals("Score is ", 203472, score);*/
+        score = bandits.score("15_test_5.txt");
+        assertEquals("Score is ", 27755, score);
+        score = bandits.score("15_test_6.txt");
+        assertEquals("Score is ", 28944, score);
+        score = bandits.score("15_test_7.txt");
+        assertEquals("Score is ", 18740, score);
+        score = bandits.score(INPUT);
+        assertEquals("Score is ", 218272, score);
     }
 
 }

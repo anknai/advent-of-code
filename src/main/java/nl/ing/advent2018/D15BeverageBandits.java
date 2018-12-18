@@ -25,6 +25,7 @@ public class D15BeverageBandits {
         units = init(fileName);
         round = 0;
         targetFound = true;
+        boolean roundComplete = false;
         while (targetFound){
             targetFound = false;
             round++;
@@ -32,12 +33,17 @@ public class D15BeverageBandits {
                 Optional<Unit> diedOptional = takeTurn(units.get(unitIndex));
                 if (diedOptional.isPresent()) {
                     Unit died = diedOptional.get();
-                    for (int k = 0; k < unitIndex; k++) {
-                        //if the unit died is before the current element, move everything up
-                        if (units.get(k) == died) {
-                            unitIndex--;
-                            break;
+                    if (unitIndex == units.size() - 1) {
+                        roundComplete = true;
+                    } else {
+                        for (int k = 0; k < unitIndex; k++) {
+                            //if the unit died is before the current element, move everything up
+                            if (units.get(k) == died) {
+                                unitIndex--;
+                                break;
+                            }
                         }
+                        roundComplete = false;
                     }
                     units.remove(died);
                     display();
@@ -53,6 +59,10 @@ public class D15BeverageBandits {
             sum += unit.getHitPoint();
         }
         --round;
+        if (!roundComplete) {
+            System.out.println("Current round didn't finish");
+            --round;
+        }
         System.out.println("Sum of hit power " + sum + " round number " + round);
         display();
         return sum * round;
@@ -80,6 +90,7 @@ public class D15BeverageBandits {
                     unit.setPoint(point);
                     if (s.charAt(j) == 'E') {
                         point.setType(Point.PointType.ELF);
+                        //unit.setAttackPower(25);
                     } else {
                         point.setType(Point.PointType.GOBLIN);
                     }

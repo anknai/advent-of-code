@@ -19,13 +19,7 @@ public class Unit implements Comparable<Unit> {
 
     @Override
     public int compareTo(Unit other) {
-        if (this.getHitPoint() > other.getHitPoint()) {
-            return 1;
-        } else if (this.getHitPoint() < other.getHitPoint()) {
-            return -1;
-        } else {
-            return this.point.compareTo(other.point);
-        }
+        return this.point.compareTo(other.point);
     }
 
     public Point.PointType getType() {
@@ -44,19 +38,23 @@ public class Unit implements Comparable<Unit> {
 
     public Optional<Unit> getAdjacentEnemy(List<Unit> units) {
         Point current = this.getPoint();
-        TreeSet<Unit> adjacentEnemies = new TreeSet<>();
+        int hitpoint = Integer.MAX_VALUE;
+        Unit enemy= null;
         for (Unit unit: units) {
             if (current.isAdjacent(unit.getPoint())) {
                 if (current.getType() != unit.getType()) {
-                    adjacentEnemies.add(unit);
+                    if (unit.getHitPoint() < hitpoint) {
+                        hitpoint = unit.getHitPoint();
+                        enemy = unit;
+                    }
                 }
             }
         }
 
-        if (adjacentEnemies.isEmpty()) {
+        if (null == enemy) {
             return Optional.empty();
         } else {
-            return Optional.of(adjacentEnemies.first());
+            return Optional.of(enemy);
         }
     }
 
