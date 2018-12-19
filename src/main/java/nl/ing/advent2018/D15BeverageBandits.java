@@ -19,11 +19,9 @@ public class D15BeverageBandits {
 
     private boolean targetFound;
 
-    private int round;
-
     public int score(String fileName, int elfPower) {
         units = init(fileName, elfPower);
-        round = 0;
+        int round = 0;
         targetFound = true;
         boolean roundComplete = false;
         while (targetFound){
@@ -58,12 +56,36 @@ public class D15BeverageBandits {
         }
         --round;
         if (!roundComplete) {
-            System.out.println("Current round didn't finish");
             --round;
         }
         System.out.println("Sum of hit power " + sum + " round number " + round);
-        display();
+        //display();
         return sum * round;
+    }
+
+    public int letTheElvesWin(String fileName) {
+        int elfPower = 3;
+        List<Unit> preUnits = init(fileName, elfPower);
+        int elves = countElves(preUnits);
+        System.out.println("Total elves before the fight " + elves);
+        int score;
+        int afterFightElves;
+        do {
+            score = score(fileName, ++elfPower);
+            afterFightElves = countElves(units);
+            System.out.println((elves - afterFightElves) + " elves killed after the fight with Attack Power " + elfPower);
+        } while (afterFightElves < elves);
+        return score;
+    }
+
+    private int countElves(List<Unit> units) {
+        int elves = 0;
+        for (Unit unit: units) {
+            if (unit.getType() == Point.PointType.ELF) {
+                elves++;
+            }
+        }
+        return elves;
     }
 
     private List<Unit> init(String fileName, int elfPower) {
@@ -103,7 +125,7 @@ public class D15BeverageBandits {
                 }
             }
         }
-        display();
+        //display();
         return units;
     }
 
@@ -196,7 +218,7 @@ public class D15BeverageBandits {
     private Optional<Unit> attack(Unit attacker, Unit enemy) {
         enemy.getHit(attacker.getAttackPower());
         if (enemy.getHitPoint() <= 0) {
-            System.out.println("Enemy " + enemy + " died in round " + round);
+            //System.out.println("Enemy " + enemy + " died in round " + round);
             points.add(enemy.getPoint());
             battleground[enemy.getPoint().getY()][enemy.getPoint().getX()] = Point.PointType.OPEN.getType();
             return Optional.of(enemy);

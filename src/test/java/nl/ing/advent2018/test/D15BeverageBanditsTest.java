@@ -34,8 +34,8 @@ public class D15BeverageBanditsTest {
 
     @Test
     public void elfWins() {
-        int score = bandits.score(INPUT, 3);
-        assertEquals("Score is ", 218272, score);
+        int score = bandits.letTheElvesWin(INPUT);
+        assertEquals("Score is ", 40861, score);
     }
 
 }
