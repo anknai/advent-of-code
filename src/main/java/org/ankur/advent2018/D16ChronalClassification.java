@@ -38,15 +38,6 @@ public class D16ChronalClassification {
             iterator.next();
         }
 
-        for (int i = 0; i < scores.size(); i++) {
-            Set<String> match = scores.get(i);
-            Iterator<String> iterator1 = match.iterator();
-            System.out.print(i + "/ ");
-            while (iterator1.hasNext()) {
-                System.out.print(iterator1.next() + " ");
-            }
-            System.out.println();
-        }
         return count;
     }
 

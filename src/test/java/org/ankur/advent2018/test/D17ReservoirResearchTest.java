@@ -4,7 +4,7 @@ import org.ankur.advent2018.D17ReservoirResearch;
 import org.ankur.advent2018.domain.Soil;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class D17ReservoirResearchTest {
 

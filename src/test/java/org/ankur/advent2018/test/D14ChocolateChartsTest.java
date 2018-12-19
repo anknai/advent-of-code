@@ -3,7 +3,7 @@ package org.ankur.advent2018.test;
 import org.ankur.advent2018.D14ChocolateCharts;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class D14ChocolateChartsTest {
 

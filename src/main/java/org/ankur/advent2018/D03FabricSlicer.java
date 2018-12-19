@@ -1,7 +1,7 @@
 package org.ankur.advent2018;
 
-import org.ankur.advent2018.domain.FabricSlice;
 import org.ankur.advent.util.FileReader;
+import org.ankur.advent2018.domain.FabricSlice;
 
 import java.util.ArrayList;
 import java.util.List;

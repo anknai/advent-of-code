@@ -4,7 +4,7 @@ import org.ankur.advent2018.D04ResponseRecord;
 import org.ankur.advent2018.domain.SleepLog;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class D04ResponseRecordTest {
 

@@ -2,10 +2,10 @@ package org.ankur.advent2018;
 
 import org.ankur.advent2018.domain.Point;
 
-import java.util.TreeSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class Dijkstra {
     public static void calculateShortestPathFromSource(Point source) {

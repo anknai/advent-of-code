@@ -8,7 +8,6 @@ import java.util.List;
 
 public class D17ReservoirResearch {
 
-    private List<Soil> soilList;
     private char[][] reservoir;
     private int fountainPosition;
 
@@ -29,7 +28,7 @@ public class D17ReservoirResearch {
             //display();
         }
         System.out.println();
-        display();
+        //display();
         int waterCapacity = 0;
         int pipes = 0;
         for (int i = 0; i < width; i++) {
@@ -54,7 +53,7 @@ public class D17ReservoirResearch {
         minY = Integer.MAX_VALUE;
         int maxX = 0;
         int maxY = 0;
-        soilList = new ArrayList<>();
+        List<Soil> soilList = new ArrayList<>();
         for (String line : lines) {
             Soil soil = parseSoil(line);
             soilList.add(soil);

@@ -3,7 +3,7 @@ package org.ankur.advent2018.test;
 import org.ankur.advent2018.D18SettlersOfTheNorthPole;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class D18SettlersOfTheNorthPoleTest {
 
@@ -18,17 +18,14 @@ public class D18SettlersOfTheNorthPoleTest {
         assertEquals("Area is ", 1147, area);
         area = northPole.area(INPUT, 10);
         assertEquals("Area is ", 675100, area);
-        area = northPole.area(INPUT, 1000);
-        assertEquals("Area is ", 191820, area);
-        area = northPole.area(INPUT, 468);
-        assertEquals("Area is ", 191820, area);
+
     }
 
     @Test
     public void areaAfterTooLong() {
-        int area = northPole.areaAfterTooLong(INPUT, 10_000);
-        assertEquals("Area is ", 189240, area);
-        area = northPole.areaAfterTooLong(INPUT, 100_000);
-        assertEquals("Area is ", 179944, area);
+        int area = northPole.area(INPUT, 1000);
+        assertEquals("Area is ", 191820, area);
+        area = northPole.area(INPUT, 468);
+        assertEquals("Area is ", 191820, area);
     }
 }

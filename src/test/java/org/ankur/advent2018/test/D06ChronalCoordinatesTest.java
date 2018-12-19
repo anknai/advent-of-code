@@ -4,7 +4,7 @@ import org.ankur.advent2018.D06ChronalCoordinates;
 import org.ankur.advent2018.domain.Coordinate;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class D06ChronalCoordinatesTest {
 

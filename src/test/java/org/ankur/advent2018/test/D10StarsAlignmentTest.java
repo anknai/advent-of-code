@@ -4,7 +4,7 @@ import org.ankur.advent2018.D10StarsAlignment;
 import org.ankur.advent2018.domain.Star;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class D10StarsAlignmentTest {
 
