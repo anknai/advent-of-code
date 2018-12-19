@@ -5,7 +5,9 @@ import nl.ing.advent2018.domain.Instruction;
 import nl.ing.advent2018.domain.Register;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class D19GoWithTheFlow {
 
@@ -13,15 +15,17 @@ public class D19GoWithTheFlow {
 
     private List<Instruction> instructions;
 
+    private Set<Integer> register0;
+
     private int ip;
 
     private int bound;
 
-    public int part1(String fileName, boolean isPart2) {
+    public int part1(String fileName, boolean isPart2, int max) {
         init(fileName, isPart2);
         int round = 0;
         ip = 0;
-        while (ip < instructions.size() && round < 100000000) {
+        while (ip < instructions.size() && round < max) {
             //System.out.println("Executing ip#" + ip);
             round++;
             Instruction instruction = instructions.get(ip);
@@ -33,9 +37,18 @@ public class D19GoWithTheFlow {
             ip = registers.get(bound).getValue();
             //displayRegisters();
             //System.out.println();
+            if (isPart2) {
+                boolean add = register0.add(registers.get(0).getValue());
+                if (add) {
+                    System.out.println("Round " + round + " ip " + ip);
+                    displayRegisters();
+                    System.out.println();
+                }
+            }
             ip++;
         }
-        System.out.println("Size is " + ip + " round " + round);
+        System.out.println();
+        System.out.println("ip is " + ip + " after round " + round);
         return registers.get(0).getValue();
     }
 
@@ -71,6 +84,7 @@ public class D19GoWithTheFlow {
 
         if (isPart2) {
             registers.get(0).setValue(1);
+            register0 = new HashSet<>();
         }
 
         instructions = new ArrayList<>();
