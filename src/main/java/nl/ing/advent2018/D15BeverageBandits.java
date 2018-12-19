@@ -21,8 +21,8 @@ public class D15BeverageBandits {
 
     private int round;
 
-    public int score(String fileName) {
-        units = init(fileName);
+    public int score(String fileName, int elfPower) {
+        units = init(fileName, elfPower);
         round = 0;
         targetFound = true;
         boolean roundComplete = false;
@@ -46,7 +46,6 @@ public class D15BeverageBandits {
                         roundComplete = false;
                     }
                     units.remove(died);
-                    display();
                 }
             }
 
@@ -55,7 +54,6 @@ public class D15BeverageBandits {
 
         int sum = 0;
         for (Unit unit: units) {
-            System.out.println(unit);
             sum += unit.getHitPoint();
         }
         --round;
@@ -68,7 +66,7 @@ public class D15BeverageBandits {
         return sum * round;
     }
 
-    private List<Unit> init(String fileName) {
+    private List<Unit> init(String fileName, int elfPower) {
         List<String> strings = FileReader.readFile(fileName);
         int width = strings.get(0).length();
         int height = strings.size();
@@ -92,14 +90,13 @@ public class D15BeverageBandits {
                     unit.setPoint(point);
                     if (s.charAt(j) == 'E') {
                         point.setType(Point.PointType.ELF);
-                        unit.setName("E" + ++elves);
-                        //unit.setAttackPower(25);
+                        unit.setName("E" + elves ++);
+                        unit.setAttackPower(elfPower);
                     } else {
                         point.setType(Point.PointType.GOBLIN);
-                        unit.setName("G" + ++goblins);
+                        unit.setName("G" + goblins++);
                     }
                     units.add(unit);
-                    log(unit.toString());
                 } else {
                     point.setType(Point.PointType.OPEN);
                     points.add(point);
@@ -153,6 +150,9 @@ public class D15BeverageBandits {
         int min = Integer.MAX_VALUE;
         Point closest = null;
         for (Point adj : adjacents) {
+            if (null != closest && adj.getDistance() == min && adj.compareTo(closest) < 0) {
+                closest = adj;
+            }
             if (adj.getDistance() < min) {
                 min = adj.getDistance();
                 closest = adj;
@@ -165,6 +165,7 @@ public class D15BeverageBandits {
 
         //Found something
         if (null != closest) {
+
             //Remove the first one
             closest.getShortestPath().removeFirst();
             Point shortest;
@@ -193,7 +194,6 @@ public class D15BeverageBandits {
     }
 
     private Optional<Unit> attack(Unit attacker, Unit enemy) {
-        //System.out.println(attacker + " is attacking " + enemy);
         enemy.getHit(attacker.getAttackPower());
         if (enemy.getHitPoint() <= 0) {
             System.out.println("Enemy " + enemy + " died in round " + round);
@@ -211,5 +211,6 @@ public class D15BeverageBandits {
             }
             LogWriter.newLine();
         }
+        LogWriter.newLine();
     }
 }
