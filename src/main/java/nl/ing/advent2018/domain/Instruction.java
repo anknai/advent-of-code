@@ -8,10 +8,11 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString(exclude = {"beforeList", "afterList"})
 public class Instruction {
 
     private int opcode;
+
+    private String code;
 
     private int a;
 
@@ -22,4 +23,8 @@ public class Instruction {
     List<Register> beforeList;
 
     List<Register> afterList;
+
+    public String toString() {
+        return code + " " + a + " " + b + " " + c.getNumber();
+    }
 }
