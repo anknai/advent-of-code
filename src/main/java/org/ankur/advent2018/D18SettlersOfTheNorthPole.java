@@ -11,8 +11,6 @@ public class D18SettlersOfTheNorthPole {
 
     private char[][] copy;
 
-    private char[][] original;
-
     private int trees;
 
     private int lumberyards;
@@ -105,7 +103,7 @@ public class D18SettlersOfTheNorthPole {
         }
 
         display();
-        original = copy(yard);
+        //char[][] original = copy(yard);
     }
 
     private void display() {
