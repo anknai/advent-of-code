@@ -84,7 +84,7 @@ public class D15BeverageBandits {
     private int countElves(List<Unit> units) {
         int elves = 0;
         for (Unit unit: units) {
-            if (unit.getType() == Point.PointType.ELF) {
+            if (unit.getType() == Point.UnitType.ELF) {
                 elves++;
             }
         }
@@ -114,16 +114,16 @@ public class D15BeverageBandits {
                     Unit unit = new Unit();
                     unit.setPoint(point);
                     if (s.charAt(j) == 'E') {
-                        point.setType(Point.PointType.ELF);
+                        point.setUnitType(Point.UnitType.ELF);
                         unit.setName("E" + elves ++);
                         unit.setAttackPower(elfPower);
                     } else {
-                        point.setType(Point.PointType.GOBLIN);
+                        point.setUnitType(Point.UnitType.GOBLIN);
                         unit.setName("G" + goblins++);
                     }
                     units.add(unit);
                 } else {
-                    point.setType(Point.PointType.OPEN);
+                    point.setUnitType(Point.UnitType.OPEN);
                     points.add(point);
                 }
             }
@@ -199,15 +199,15 @@ public class D15BeverageBandits {
             } else {
                 shortest = closest;
             }
-            Point.PointType elfOrGob = current.getType();
+            Point.UnitType elfOrGob = current.getUnitType();
             unit.setPoint(shortest);
-            shortest.setType(elfOrGob);
+            shortest.setUnitType(elfOrGob);
             shortest.setAdjacentNodes(new TreeMap<>());
             shortest.setShortestPath(new LinkedList<>());
-            current.setType(Point.PointType.OPEN);
+            current.setUnitType(Point.UnitType.OPEN);
             points.remove(shortest);
             points.add(current);
-            battleground[current.getY()][current.getX()] = Point.PointType.OPEN.getType();
+            battleground[current.getY()][current.getX()] = Point.UnitType.OPEN.getType();
             battleground[shortest.getY()][shortest.getX()] = elfOrGob.getType();
             Optional<Unit> adjacentEnemy = unit.getAdjacentEnemy(units);
             targetFound = true;
@@ -223,7 +223,7 @@ public class D15BeverageBandits {
         if (enemy.getHitPoint() <= 0) {
             //System.out.println("Enemy " + enemy + " died in round " + round);
             points.add(enemy.getPoint());
-            battleground[enemy.getPoint().getY()][enemy.getPoint().getX()] = Point.PointType.OPEN.getType();
+            battleground[enemy.getPoint().getY()][enemy.getPoint().getX()] = Point.UnitType.OPEN.getType();
             return Optional.of(enemy);
         }
         return Optional.empty();

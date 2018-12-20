@@ -1,6 +1,6 @@
 package org.ankur.advent2018;
 
-import org.ankur.advent2018.domain.Node;
+import org.ankur.advent2018.domain.Point;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,15 +10,15 @@ import java.util.TreeSet;
 
 public class D20RegularMap {
 
-    private TreeSet<Node> nodes;
+    private TreeSet<Point> Points;
 
-    private Node me;
+    private Point me;
 
     public int farthestRoom(String pattern) {
-        nodes = new TreeSet<>();
+        Points = new TreeSet<>();
         //First room is at 0, 0
-        me = new Node(0, 0, Node.NodeType.ME);
-        nodes.add(me);
+        me = new Point(0, 0, Point.AreaType.ME);
+        Points.add(me);
         //Start with the 2nd character, as 1st is ^ to indicate start of the map
         drawMap(pattern.substring(1), 0, 0);
         markAdjacent();
@@ -29,43 +29,39 @@ public class D20RegularMap {
     }
 
     public int roomWithDistance(String pattern, int distance) {
-        nodes = new TreeSet<>();
+        Points = new TreeSet<>();
         //First room is at 0, 0
-        me = new Node(0, 0, Node.NodeType.ME);
-        nodes.add(me);
+        me = new Point(0, 0, Point.AreaType.ME);
+        Points.add(me);
         //Start with the 2nd character, as 1st is ^ to indicate start of the map
         drawMap(pattern.substring(1), 0, 0);
         markAdjacent();
         return minimum(distance);
     }
 
-    //^WNE$
     private void drawMap(String regex, int x, int y) {
         char[] reg = regex.toCharArray();
-        //System.out.println("Handling " + regex);
         for (char c : reg) {
             switch (c) {
                 case 'W':
-                    add(--x, y, Node.NodeType.VER_DOOR);
-                    add(--x, y, Node.NodeType.ROOM);
+                    add(--x, y, Point.AreaType.VER_DOOR);
+                    add(--x, y, Point.AreaType.ROOM);
                     break;
                 case 'N':
-                    add(x, --y, Node.NodeType.HOR_DOOR);
-                    add(x, --y, Node.NodeType.ROOM);
+                    add(x, --y, Point.AreaType.HOR_DOOR);
+                    add(x, --y, Point.AreaType.ROOM);
                     break;
                 case 'E':
-                    add(++x, y, Node.NodeType.VER_DOOR);
-                    add(++x, y, Node.NodeType.ROOM);
+                    add(++x, y, Point.AreaType.VER_DOOR);
+                    add(++x, y, Point.AreaType.ROOM);
                     break;
                 case 'S':
-                    add(x, ++y, Node.NodeType.HOR_DOOR);
-                    add(x, ++y, Node.NodeType.ROOM);
+                    add(x, ++y, Point.AreaType.HOR_DOOR);
+                    add(x, ++y, Point.AreaType.ROOM);
                     break;
                 case '$':
-                    //System.out.println("End of map ");
                     return;
                 case '(':
-                    //System.out.println("Branching at " + i + " for " + regex);
                     String[] strings = matchingBrace(regex);
                     String[] branches = splitBranches(strings[0]);
                     for (String branch : branches) {
@@ -73,28 +69,26 @@ public class D20RegularMap {
                     }
                     drawMap(strings[1], x, y);
                     return;
-                case ')':
-                    //System.out.println("Branch ending at " + i + " for " + regex);
+                default:
                     break;
             }
         }
-        //System.out.println("Done with " + regex);
     }
 
-    private void add(int x, int y, Node.NodeType nodeType) {
-        Node node = new Node(x, y, nodeType);
-        nodes.add(node);
+    private void add(int x, int y, Point.AreaType AreaType) {
+        Point Point = new Point(x, y, AreaType);
+        Points.add(Point);
     }
 
     private void fillTheGrid() {
-        Node first = nodes.first();
-        Node last = nodes.last();
+        Point first = Points.first();
+        Point last = Points.last();
         for (int x = first.getX() - 1; x <= last.getX() + 1; x++) {
             for (int y = first.getY() - 1; y <= last.getY() + 1; y++) {
-                Node node = new Node(x, y, Node.NodeType.WALL);
-                Node ceiling = nodes.ceiling(node);
-                if (null == ceiling || !(ceiling.equals(node))) {
-                    nodes.add(node);
+                Point point = new Point(x, y, Point.AreaType.WALL);
+                Point ceiling = Points.ceiling(point);
+                if (null == ceiling || !(ceiling.equals(point))) {
+                    Points.add(point);
                 }
             }
         }
@@ -103,37 +97,37 @@ public class D20RegularMap {
     private void markAdjacent() {
         int x = 0;
         int y = 0;
-        Optional<Node> room = isAdjacent(x-1, y, Direction.LEFT);
-        room.ifPresent(node -> me.addDestination(node, 1));
+        Optional<Point> room = isAdjacent(x-1, y, Direction.LEFT);
+        room.ifPresent(Point -> me.addDestination(Point, 1));
         room = isAdjacent(x+1, y, Direction.RIGHT);
-        room.ifPresent(node -> me.addDestination(node, 1));
+        room.ifPresent(Point -> me.addDestination(Point, 1));
         room = isAdjacent(x, y-1, Direction.UP);
-        room.ifPresent(node -> me.addDestination(node, 1));
+        room.ifPresent(Point -> me.addDestination(Point, 1));
         room = isAdjacent(x, y+1, Direction.DOWN);
-        room.ifPresent(node -> me.addDestination(node, 1));
+        room.ifPresent(Point -> me.addDestination(Point, 1));
 
-        for (Node current : nodes) {
-            if (current.getType() == Node.NodeType.ROOM) {
+        for (Point current : Points) {
+            if (current.getAreaType() == Point.AreaType.ROOM) {
                 x = current.getX();
                 y = current.getY();
                 room = isAdjacent(x - 1, y, Direction.LEFT);
-                room.ifPresent(node -> current.addDestination(node, 1));
+                room.ifPresent(Point -> current.addDestination(Point, 1));
                 room = isAdjacent(x + 1, y, Direction.RIGHT);
-                room.ifPresent(node -> current.addDestination(node, 1));
+                room.ifPresent(Point -> current.addDestination(Point, 1));
                 room = isAdjacent(x, y - 1, Direction.UP);
-                room.ifPresent(node -> current.addDestination(node, 1));
+                room.ifPresent(Point -> current.addDestination(Point, 1));
                 room = isAdjacent(x, y + 1, Direction.DOWN);
-                room.ifPresent(node -> current.addDestination(node, 1));
+                room.ifPresent(Point -> current.addDestination(Point, 1));
             }
         }
     }
 
     private int calculateDistance() {
-        NodeDijkstra.calculateShortestPathFromSource(me);
+        Dijkstra.calculateShortestPathFromSource(me);
         int max = 0;
-        Node farthest = null;
-        for (Node current : nodes) {
-            if (current.getType() == Node.NodeType.ROOM) {
+        Point farthest = null;
+        for (Point current : Points) {
+            if (current.getAreaType() == Point.AreaType.ROOM) {
                 int distance = current.getDistance();
                 if (distance != Integer.MAX_VALUE && max < distance) {
                     max = distance;
@@ -147,10 +141,10 @@ public class D20RegularMap {
     }
 
     private int minimum(int min) {
-        NodeDijkstra.calculateShortestPathFromSource(me);
+        Dijkstra.calculateShortestPathFromSource(me);
         int count = 0;
-        for (Node current : nodes) {
-            if (current.getType() == Node.NodeType.ROOM) {
+        for (Point current : Points) {
+            if (current.getAreaType() == Point.AreaType.ROOM) {
                 int distance = current.getDistance();
                 if (distance >= min) {
                     count ++;
@@ -161,13 +155,14 @@ public class D20RegularMap {
         return count;
     }
 
-    private Optional<Node> isAdjacent(int x, int y, Direction direction) {
-        Node node = new Node(x, y, Node.NodeType.ROOM);
-        Node ceiling = nodes.ceiling(node);
+    private Optional<Point> isAdjacent(int x, int y, Direction direction) {
+        Point point = new Point(x, y, Point.AreaType.ROOM);
+        Point ceiling = Points.ceiling(point);
         //There is a door on adjacent cell
-        if (null != ceiling && ceiling.equals(node) && (ceiling.getType() == Node.NodeType.HOR_DOOR || ceiling.getType() == Node.NodeType.VER_DOOR)) {
+        if (null != ceiling && ceiling.equals(point) &&
+                (ceiling.getAreaType() == Point.AreaType.HOR_DOOR || ceiling.getAreaType() == Point.AreaType.VER_DOOR)) {
             //find the room and return it
-            Node room;
+            Point room;
             switch (direction) {
                 case LEFT:
                     --x;
@@ -183,24 +178,24 @@ public class D20RegularMap {
                     break;
 
             }
-            node = new Node(x, y, Node.NodeType.ROOM);
-            room = nodes.ceiling(node);
-            return Optional.of(room);
+            point = new Point(x, y, Point.AreaType.ROOM);
+            room = Points.ceiling(point);
+            return (null == room) ? Optional.empty() : Optional.of(room);
         } else {
             return Optional.empty();
         }
     }
 
     private void display() {
-        Iterator<Node> iterator = nodes.iterator();
-        Node previous = iterator.next();
-        System.out.print(previous.getType().getType());
+        Iterator<Point> iterator = Points.iterator();
+        Point previous = iterator.next();
+        System.out.print(previous.getAreaType().getType());
         while (iterator.hasNext()) {
-            Node current = iterator.next();
+            Point current = iterator.next();
             if (current.getY() != previous.getY()) {
                 System.out.println();
             }
-            System.out.print(current.getType().getType());
+            System.out.print(current.getAreaType().getType());
             previous = current;
         }
         System.out.println();
@@ -232,11 +227,9 @@ public class D20RegularMap {
 
     public String[] splitBranches(String string) {
         List<String> splitList = new ArrayList<>();
-        //System.out.println("String to split is " + string);
         String[] splits = string.split("\\|");
         for (int i = 0; i < splits.length; i++) {
             String split = splits[i];
-            //System.out.println(split);
             if (countChar(split, ')') == countChar(split, '(')) {
                 splitList.add(split);
             } else {
@@ -246,13 +239,13 @@ public class D20RegularMap {
         return splitList.toArray(new String[0]);
     }
 
-    private int countChar(String str, char c)
-    {
+    private int countChar(String str, char c) {
         int count = 0;
 
-        for(int i=0; i < str.length(); i++)
-        {    if(str.charAt(i) == c)
-            count++;
+        for (int i = 0; i < str.length(); i++) {
+            if(str.charAt(i) == c) {
+                count++;
+            }
         }
 
         return count;

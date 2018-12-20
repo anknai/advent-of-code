@@ -22,8 +22,8 @@ public class Unit implements Comparable<Unit> {
         return this.point.compareTo(other.point);
     }
 
-    public Point.PointType getType() {
-        return this.point.getType();
+    public Point.UnitType getType() {
+        return this.point.getUnitType();
     }
 
     public List<Point> getAdjacent(List<Point> points) {
@@ -42,7 +42,7 @@ public class Unit implements Comparable<Unit> {
         Unit enemy= null;
         for (Unit unit: units) {
             if (current.isAdjacent(unit.getPoint())) {
-                if (current.getType() != unit.getType()) {
+                if (current.getUnitType() != unit.getType()) {
                     if (unit.getHitPoint() == hitpoint && unit.compareTo(enemy) < 0) {
                         enemy = unit;
                     } else if (unit.getHitPoint() < hitpoint) {

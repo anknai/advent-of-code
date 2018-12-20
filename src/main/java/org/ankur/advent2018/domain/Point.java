@@ -1,6 +1,7 @@
 package org.ankur.advent2018.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -11,19 +12,28 @@ import java.util.TreeMap;
 @Getter
 @Setter
 @ToString(exclude = {"shortestPath", "adjacentNodes", "distance"})
+@NoArgsConstructor
 public class Point implements Comparable<Point> {
 
     private int x;
 
     private int y;
 
-    private PointType type;
+    private UnitType unitType;
+
+    private AreaType areaType;
 
     private LinkedList<Point> shortestPath = new LinkedList<>();
 
     private Integer distance = Integer.MAX_VALUE;
 
     private Map<Point, Integer> adjacentNodes = new TreeMap<>();
+
+    public Point(int x, int y, AreaType areaType) {
+        this.x = x;
+        this.y = y;
+        this.areaType = areaType;
+    }
 
     @Override
     public int compareTo(Point other) {
@@ -34,6 +44,20 @@ public class Point implements Comparable<Point> {
             return -1;
         }
         return Integer.compare(this.x, other.x);
+    }
+
+    @Override
+    public int hashCode() {
+        return x* 5 + y*13 + 29;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Point)) {
+            return false;
+        }
+        Point other = (Point) o;
+        return (other.x == this.x && other.y == this.y);
     }
 
     public boolean isAdjacent(Point other) {
@@ -49,14 +73,32 @@ public class Point implements Comparable<Point> {
         adjacentNodes.put(destination, distance);
     }
 
-    public enum PointType {
+    public enum UnitType {
         OPEN('.'),
         ELF('E'),
         GOBLIN('G');
 
         private char type;
 
-        PointType(char type) {
+        UnitType(char type) {
+            this.type = type;
+        }
+
+        public char getType() {
+            return type;
+        }
+    }
+
+    public enum AreaType {
+        WALL('#'),
+        ME('X'),
+        ROOM('.'),
+        HOR_DOOR('-'),
+        VER_DOOR('|');
+
+        private char type;
+
+        AreaType(char type) {
             this.type = type;
         }
 
