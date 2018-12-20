@@ -4,7 +4,7 @@ import org.ankur.advent.util.FileReader;
 import org.ankur.advent2018.D20RegularMap;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class D20RegularMapTest {
 
@@ -22,6 +22,10 @@ public class D20RegularMapTest {
         assertEquals(23, distance);
         distance = regularMap.farthestRoom("^WSSEESWWWNW(S|NENNEEEENN(ESSSSW(NWSW|SSEN)|WSWWN(E|WWS(E|SS))))$");
         assertEquals(31, distance);
+        distance = regularMap.farthestRoom("^WWWW(SSSSS|)WWWWW$");
+        assertEquals(9, distance);
+        distance = regularMap.farthestRoom("^NNNNN(EEEEE|NNN)NNNNN$");
+        assertEquals(10, distance);
         String regex = FileReader.readFileAsString("20_rooms.txt");
         distance = regularMap.farthestRoom(regex);
         assertEquals(3806, distance);

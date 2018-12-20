@@ -3,7 +3,6 @@ package org.ankur.advent2018;
 import org.ankur.advent2018.domain.Point;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.TreeSet;
@@ -14,16 +13,26 @@ public class D20RegularMap {
 
     private Point me;
 
+    private int maxX;
+
+    private int minX;
+
     public int farthestRoom(String pattern) {
+        minX = 0;
+        maxX = 0;
         points = new TreeSet<>();
         //First room is at 0, 0 where I am standing
-        me = new Point(0, 0, Point.AreaType.ME);
+        me = new Point(minX, 0, Point.AreaType.ME);
         points.add(me);
         //Start with the 2nd character, as 1st is ^ to indicate start of the map
         drawMap(pattern.substring(1), 0, 0);
         markAdjacent();
         int distance = calculateDistance();
-        display();
+        if (maxX - minX < 100) {
+            display();
+        } else {
+            visualize(distance);
+        }
         return distance;
     }
 
@@ -75,6 +84,12 @@ public class D20RegularMap {
     }
 
     private void add(int x, int y, Point.AreaType AreaType) {
+        if (x < minX) {
+            minX = x;
+        }
+        if (x > maxX) {
+            maxX = x;
+        }
         Point Point = new Point(x, y, AreaType);
         points.add(Point);
     }
@@ -174,9 +189,9 @@ public class D20RegularMap {
     private void display() {
         Point first = points.first();
         Point last = points.last();
-        int minX = first.getX() - 1;
+        int minX = this.minX - 1;
         int minY = first.getY() - 1;
-        int maxX = last.getX() + 1;
+        int maxX = this.maxX + 1;
         int maxY = last.getY() + 1;
 
         for (int y = minY; y <= maxY; y++) {
@@ -185,6 +200,42 @@ public class D20RegularMap {
                 Point ceiling = points.ceiling(point);
                 if (null == ceiling || !(ceiling.equals(point))) {
                     System.out.print(point.getAreaType().getType());
+                } else {
+                    System.out.print(ceiling.getAreaType().getType());
+                }
+            }
+            System.out.println();
+        }
+
+        System.out.println();
+    }
+
+    private void visualize(int max) {
+        Point first = points.first();
+        Point last = points.last();
+        int minY = first.getY();
+        int maxY = last.getY();
+        //first char
+        char a = 65;
+        int changeAt = max / 26 + 1;
+        int xIncrement = 1;
+        int yIncrement = 1;
+        if (maxX - minX > 120) {
+            xIncrement = (maxX - minX) / 120 + 1;
+        }
+        if (maxY - minY > 50) {
+            yIncrement = (maxY - minY) / 50 + 1;
+        }
+        for (int y = minY; y <= maxY; y += yIncrement) {
+            for (int x = minX; x <= maxX; x += xIncrement) {
+                Point point = new Point(x, y, Point.AreaType.WALL);
+                Point ceiling = points.ceiling(point);
+                if (null == ceiling || !(ceiling.equals(point))) {
+                    System.out.print(' ');
+                } else if (Point.AreaType.ROOM == ceiling.getAreaType()) {
+                    System.out.print((char)(a + ceiling.getDistance() / changeAt));
+                } else if (Point.AreaType.ME == ceiling.getAreaType()) {
+                    System.out.print('#');
                 } else {
                     System.out.print(ceiling.getAreaType().getType());
                 }
