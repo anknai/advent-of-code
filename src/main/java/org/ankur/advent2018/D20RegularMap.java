@@ -10,29 +10,28 @@ import java.util.TreeSet;
 
 public class D20RegularMap {
 
-    private TreeSet<Point> Points;
+    private TreeSet<Point> points;
 
     private Point me;
 
     public int farthestRoom(String pattern) {
-        Points = new TreeSet<>();
-        //First room is at 0, 0
+        points = new TreeSet<>();
+        //First room is at 0, 0 where I am standing
         me = new Point(0, 0, Point.AreaType.ME);
-        Points.add(me);
+        points.add(me);
         //Start with the 2nd character, as 1st is ^ to indicate start of the map
         drawMap(pattern.substring(1), 0, 0);
         markAdjacent();
         int distance = calculateDistance();
-        fillTheGrid();
         display();
         return distance;
     }
 
     public int roomWithDistance(String pattern, int distance) {
-        Points = new TreeSet<>();
+        points = new TreeSet<>();
         //First room is at 0, 0
         me = new Point(0, 0, Point.AreaType.ME);
-        Points.add(me);
+        points.add(me);
         //Start with the 2nd character, as 1st is ^ to indicate start of the map
         drawMap(pattern.substring(1), 0, 0);
         markAdjacent();
@@ -77,21 +76,7 @@ public class D20RegularMap {
 
     private void add(int x, int y, Point.AreaType AreaType) {
         Point Point = new Point(x, y, AreaType);
-        Points.add(Point);
-    }
-
-    private void fillTheGrid() {
-        Point first = Points.first();
-        Point last = Points.last();
-        for (int x = first.getX() - 1; x <= last.getX() + 1; x++) {
-            for (int y = first.getY() - 1; y <= last.getY() + 1; y++) {
-                Point point = new Point(x, y, Point.AreaType.WALL);
-                Point ceiling = Points.ceiling(point);
-                if (null == ceiling || !(ceiling.equals(point))) {
-                    Points.add(point);
-                }
-            }
-        }
+        points.add(Point);
     }
 
     private void markAdjacent() {
@@ -106,7 +91,7 @@ public class D20RegularMap {
         room = isAdjacent(x, y+1, Direction.DOWN);
         room.ifPresent(Point -> me.addDestination(Point, 1));
 
-        for (Point current : Points) {
+        for (Point current : points) {
             if (current.getAreaType() == Point.AreaType.ROOM) {
                 x = current.getX();
                 y = current.getY();
@@ -126,7 +111,7 @@ public class D20RegularMap {
         Dijkstra.calculateShortestPathFromSource(me);
         int max = 0;
         Point farthest = null;
-        for (Point current : Points) {
+        for (Point current : points) {
             if (current.getAreaType() == Point.AreaType.ROOM) {
                 int distance = current.getDistance();
                 if (distance != Integer.MAX_VALUE && max < distance) {
@@ -143,7 +128,7 @@ public class D20RegularMap {
     private int minimum(int min) {
         Dijkstra.calculateShortestPathFromSource(me);
         int count = 0;
-        for (Point current : Points) {
+        for (Point current : points) {
             if (current.getAreaType() == Point.AreaType.ROOM) {
                 int distance = current.getDistance();
                 if (distance >= min) {
@@ -157,7 +142,7 @@ public class D20RegularMap {
 
     private Optional<Point> isAdjacent(int x, int y, Direction direction) {
         Point point = new Point(x, y, Point.AreaType.ROOM);
-        Point ceiling = Points.ceiling(point);
+        Point ceiling = points.ceiling(point);
         //There is a door on adjacent cell
         if (null != ceiling && ceiling.equals(point) &&
                 (ceiling.getAreaType() == Point.AreaType.HOR_DOOR || ceiling.getAreaType() == Point.AreaType.VER_DOOR)) {
@@ -179,7 +164,7 @@ public class D20RegularMap {
 
             }
             point = new Point(x, y, Point.AreaType.ROOM);
-            room = Points.ceiling(point);
+            room = points.ceiling(point);
             return (null == room) ? Optional.empty() : Optional.of(room);
         } else {
             return Optional.empty();
@@ -187,18 +172,26 @@ public class D20RegularMap {
     }
 
     private void display() {
-        Iterator<Point> iterator = Points.iterator();
-        Point previous = iterator.next();
-        System.out.print(previous.getAreaType().getType());
-        while (iterator.hasNext()) {
-            Point current = iterator.next();
-            if (current.getY() != previous.getY()) {
-                System.out.println();
+        Point first = points.first();
+        Point last = points.last();
+        int minX = first.getX() - 1;
+        int minY = first.getY() - 1;
+        int maxX = last.getX() + 1;
+        int maxY = last.getY() + 1;
+
+        for (int y = minY; y <= maxY; y++) {
+            for (int x = minX; x <= maxX; x++) {
+                Point point = new Point(x, y, Point.AreaType.WALL);
+                Point ceiling = points.ceiling(point);
+                if (null == ceiling || !(ceiling.equals(point))) {
+                    System.out.print(point.getAreaType().getType());
+                } else {
+                    System.out.print(ceiling.getAreaType().getType());
+                }
             }
-            System.out.print(current.getAreaType().getType());
-            previous = current;
+            System.out.println();
         }
-        System.out.println();
+
         System.out.println();
     }
 
