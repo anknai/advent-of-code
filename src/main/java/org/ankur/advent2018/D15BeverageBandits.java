@@ -22,7 +22,7 @@ public class D15BeverageBandits {
 
     private boolean targetFound;
 
-    public int score(String fileName, int elfPower) {
+    public int score(String fileName, int elfPower, boolean part2) {
         units = init(fileName, elfPower);
         int round = 0;
         targetFound = true;
@@ -34,6 +34,10 @@ public class D15BeverageBandits {
                 Optional<Unit> diedOptional = takeTurn(units.get(unitIndex));
                 if (diedOptional.isPresent()) {
                     Unit died = diedOptional.get();
+                    if (part2 && died.getType() == Point.UnitType.ELF) {
+                        System.out.println("Elf died in round " + round + " while using Attack Power " + elfPower);
+                        return -1;
+                    }
                     if (unitIndex == units.size() - 1) {
                         roundComplete = true;
                     } else {
@@ -68,27 +72,12 @@ public class D15BeverageBandits {
 
     public int letTheElvesWin(String fileName) {
         int elfPower = 3;
-        List<Unit> preUnits = init(fileName, elfPower);
-        int elves = countElves(preUnits);
-        System.out.println("Total elves before the fight " + elves);
         int score;
-        int afterFightElves;
         do {
-            score = score(fileName, ++elfPower);
-            afterFightElves = countElves(units);
-            System.out.println((elves - afterFightElves) + " elves killed after the fight with Attack Power " + elfPower);
-        } while (afterFightElves < elves);
+            score = score(fileName, ++elfPower, true);
+        } while (score == -1);
+        System.out.println("No elf died while using Attack Power " + elfPower);
         return score;
-    }
-
-    private int countElves(List<Unit> units) {
-        int elves = 0;
-        for (Unit unit: units) {
-            if (unit.getType() == Point.UnitType.ELF) {
-                elves++;
-            }
-        }
-        return elves;
     }
 
     private List<Unit> init(String fileName, int elfPower) {
