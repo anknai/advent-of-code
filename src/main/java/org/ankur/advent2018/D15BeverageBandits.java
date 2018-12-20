@@ -71,26 +71,12 @@ public class D15BeverageBandits {
     }
 
     public int letTheElvesWin(String fileName) {
-        int elfPower = 4;
+        int elfPower = 3;
         int score;
-        int lastFailure = 3;
-        int lastSuccess = Integer.MAX_VALUE;
         do {
-            score = score(fileName, elfPower, true);
-            if (score == -1) {
-                lastFailure = elfPower;
-                if (lastSuccess == Integer.MAX_VALUE) {
-                    elfPower *= 2;
-                } else {
-                    elfPower = (lastSuccess + lastFailure) / 2;
-                }
-            } else {
-                System.out.println("No elf died while using Attack Power " + elfPower);
-                lastSuccess = elfPower;
-                elfPower = (lastSuccess + lastFailure) / 2;
-            }
-        } while (score == -1 || (lastSuccess - lastFailure) > 1);
-
+            score = score(fileName, ++elfPower, true);
+        } while (score == -1);
+        System.out.println("No elf died while using Attack Power " + elfPower);
         return score;
     }
 

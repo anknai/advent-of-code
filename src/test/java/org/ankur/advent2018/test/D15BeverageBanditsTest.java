@@ -30,12 +30,16 @@ public class D15BeverageBanditsTest {
         assertEquals("Score is ", 18740, score);
         score = bandits.score(INPUT, 3, false);
         assertEquals("Score is ", 218272, score);
+        score = bandits.score("15_battle_2.txt", 3, false);
+        assertEquals("Score is ", 198744, score);
     }
 
     @Test
     public void elfWins() {
         int score = bandits.letTheElvesWin(INPUT);
         assertEquals("Score is ", 40861, score);
+        score = bandits.letTheElvesWin("15_battle_2.txt");
+        assertEquals("Score is ", 66510, score);
     }
 
 }
