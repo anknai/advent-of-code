@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class D21ChronalConversion {
 
-    public int better(String fileName, boolean part1) {
+    public int findHalt(String fileName, boolean part1) {
         Set<Integer> seen = new LinkedHashSet<>();
         int c = 0;
         int lastUniqueC = -1;
