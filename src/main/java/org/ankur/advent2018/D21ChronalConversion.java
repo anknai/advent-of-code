@@ -1,107 +1,46 @@
 package org.ankur.advent2018;
 
 import org.ankur.advent.util.FileReader;
-import org.ankur.advent2018.domain.Instruction;
-import org.ankur.advent2018.domain.Register;
 
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.Set;
 
 public class D21ChronalConversion {
 
-    private List<Register> registers;
-
-    private List<Instruction> instructions;
-
-    private int bound;
-
-    public int part1(String fileName, int register0, int max) {
-        init(fileName, register0);
-        int ip = 0;
-        int round = 0;
-        while (ip < instructions.size()) {
-            ip = 0;
-            round = 0;
-            while (ip < instructions.size() && round < max) {
-                round++;
-                Instruction instruction = instructions.get(ip);
-                registers.get(bound).setValue(ip);
-                int result = D19GoWithTheFlow.execute(instruction, registers);
-                Register c = registers.get(instruction.getC().getNumber());
-                c.setValue(result);
-                ip = registers.get(bound).getValue();
-                ip++;
-            }
-            reset(++register0);
-        }
-        --register0;
-        System.out.println("Using " + register0 + " as register 0 value ");
-        System.out.println("ip is " + ip + " after round " + round);
-        return register0;
-    }
-
-    public int part2(String fileName, int register0, int inst, int max) {
-        init(fileName, register0);
-        int ip = 0;
-        int round = inst;
-        int previousMax = inst;
-        while (true) {
-            ip = 0;
-            round = 0;
-            while (ip < instructions.size() && round < max) {
-                round++;
-                Instruction instruction = instructions.get(ip);
-                registers.get(bound).setValue(ip);
-                int result = D19GoWithTheFlow.execute(instruction, registers);
-                Register c = registers.get(instruction.getC().getNumber());
-                c.setValue(result);
-                ip = registers.get(bound).getValue();
-                ip++;
-            }
-            if (register0 % 1_00_000 == 0) {
-                System.out.println("Using " + register0 + " as register 0 value ");
-                System.out.println("ip is " + ip + " after round " + round);
-            }
-            if (round < previousMax) {
-                break;
-            } else if (round > previousMax && round != max) {
-                previousMax = round;
-            }
-            reset(++register0);
-        }
-        --register0;
-        System.out.println("Using " + register0 + " as register 0 value ");
-        System.out.println("ip is " + ip + " after round " + round);
-        return register0;
-    }
-
-    private void init(String fileName, int zeroValue) {
-        registers = new ArrayList<>();
-        for (int i = 0; i < 6; i ++) {
-            Register register = Register.builder()
-                    .number(i)
-                    .value(0)
-                    .build();
-            registers.add(register);
-        }
-
-        registers.get(0).setValue(zeroValue);
-
-        instructions = new ArrayList<>();
-
+    public int better(String fileName, boolean part1) {
+        Set<Integer> seen = new LinkedHashSet<>();
+        int c = 0;
+        int lastUniqueC = -1;
         List<String> lines = FileReader.readFile(fileName);
-        bound = Character.getNumericValue(lines.get(0).charAt(4));
-        for (int i = 1; i < lines.size(); i++) {
-            instructions.add(D19GoWithTheFlow.parse(lines.get(i)));
-        }
-    }
-
-    private void reset(int register0) {
-        registers.get(0).setValue(register0);
-        for (int i = 1; i < 6; i++) {
-            registers.get(i).setValue(0);
+        int magicNumber = Integer.parseInt(lines.get(8).split(" ")[1]);
+        int and0 = Integer.parseInt(lines.get(7).split(" ")[2]);
+        int and1 = Integer.parseInt(lines.get(9).split(" ")[2]);
+        int and2 = Integer.parseInt(lines.get(11).split(" ")[2]);
+        int and3 = Integer.parseInt(lines.get(12).split(" ")[2]);
+        while(true) {
+            int a = c | and0;
+            c = magicNumber;
+            while(true) {
+                c = (((c + (a & and1)) & and2) * and3) & and2;
+                if (and1 + 1 > a) {
+                    if (part1) {
+                        System.out.println("Found " + c);
+                        return c;
+                    } else {
+                        if (!seen.contains(c)){
+                            seen.add(c);
+                            lastUniqueC = c;
+                            break;
+                        } else {
+                            System.out.println("Found " + lastUniqueC);
+                            return lastUniqueC;
+                        }
+                    }
+                } else {
+                    a /= (and1 + 1);
+                }
+            }
         }
     }
 }

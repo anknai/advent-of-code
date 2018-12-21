@@ -97,7 +97,7 @@ public class D19GoWithTheFlow {
         }
     }
 
-    static Instruction parse(String line) {
+    private static Instruction parse(String line) {
         //seti 5 0 1
         String[] split = line.split(" ");
         String opCode = split[0];
@@ -169,7 +169,7 @@ public class D19GoWithTheFlow {
         return instruction;
     }
 
-    static int execute(Instruction instruction, List<Register> registers) {
+    private static int execute(Instruction instruction, List<Register> registers) {
         int opCode = instruction.getOpcode();
         Register a = null;
         if (instruction.getA() < registers.size()) {
