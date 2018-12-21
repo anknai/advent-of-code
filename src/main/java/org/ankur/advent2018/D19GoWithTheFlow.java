@@ -31,7 +31,7 @@ public class D19GoWithTheFlow {
             Instruction instruction = instructions.get(ip);
             registers.get(bound).setValue(ip);
             //displayPart1(instruction);
-            int result = execute(instruction);
+            int result = execute(instruction, registers);
             Register c = registers.get(instruction.getC().getNumber());
             c.setValue(result);
             ip = registers.get(bound).getValue();
@@ -91,13 +91,13 @@ public class D19GoWithTheFlow {
 
         List<String> lines = FileReader.readFile(fileName);
         bound = Character.getNumericValue(lines.get(0).charAt(4));
-        System.out.println("Instruction Pointer bound  to " + bound);
+        //System.out.println("Instruction Pointer bound  to " + bound);
         for (int i = 1; i < lines.size(); i++) {
             instructions.add(parse(lines.get(i)));
         }
     }
 
-    private Instruction parse(String line) {
+    static Instruction parse(String line) {
         //seti 5 0 1
         String[] split = line.split(" ");
         String opCode = split[0];
@@ -169,7 +169,7 @@ public class D19GoWithTheFlow {
         return instruction;
     }
 
-    private int execute(Instruction instruction) {
+    static int execute(Instruction instruction, List<Register> registers) {
         int opCode = instruction.getOpcode();
         Register a = null;
         if (instruction.getA() < registers.size()) {
