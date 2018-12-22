@@ -2,18 +2,15 @@ package org.ankur.advent2018;
 
 import org.ankur.advent2018.domain.Region;
 
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
-public class RegionDijkstra {
-    public static void calculateShortestPathFromSource(Region source) {
+class RegionDijkstra {
+    static void calculateShortestPathFromSource(Region source) {
 
         source.setDistance(0);
 
-        Set<Region> settledRegions = new TreeSet<>();
-        Set<Region> unsettledRegions = new TreeSet<>();
+        Set<Region> settledRegions = new HashSet<>();
+        Set<Region> unsettledRegions = new HashSet<>();
         unsettledRegions.add(source);
 
         while (unsettledRegions.size() != 0) {

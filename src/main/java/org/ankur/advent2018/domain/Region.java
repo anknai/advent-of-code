@@ -5,15 +5,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
+
+import static org.ankur.advent2018.domain.Region.Gear.*;
+import static org.ankur.advent2018.domain.Region.RegionType.*;
 
 @Getter
 @Setter
 @ToString(exclude = {"shortestPath", "adjacentNodes", "distance"})
 @NoArgsConstructor
-public class Region implements Comparable<Region> {
+public class Region {
 
     private int x;
 
@@ -25,23 +26,14 @@ public class Region implements Comparable<Region> {
 
     private Integer distance = Integer.MAX_VALUE;
 
-    private Map<Region, Integer> adjacentNodes = new TreeMap<>();
+    private Map<Region, Integer> adjacentNodes = new HashMap<>();
+
+    private Gear gear;
 
     public Region(int x, int y, RegionType regionType) {
         this.x = x;
         this.y = y;
         this.regionType = regionType;
-    }
-
-    @Override
-    public int compareTo(Region other) {
-        if (this.y > other.y) {
-            return 1;
-        }
-        if (this.y < other.y) {
-            return -1;
-        }
-        return Integer.compare(this.x, other.x);
     }
 
     @Override
@@ -55,17 +47,73 @@ public class Region implements Comparable<Region> {
             return false;
         }
         Region other = (Region) o;
-        return (other.x == this.x && other.y == this.y);
+        return (other.x == this.x && other.y == this.y
+                && this.regionType == other.regionType && this.gear == other.gear);
     }
 
-    public boolean isAdjacent(Region other) {
-        return Math.abs(other.getX() - this.getX()) == 1 && Math.abs(other.getY() - this.getY()) == 0
-                || Math.abs(other.getX() - this.getX()) == 0 && Math.abs(other.getY() - this.getY()) == 1;
-
-    }
-
-    public void addDestination(Region destination, int distance) {
+    private void addDestination(Region destination, int distance) {
         adjacentNodes.put(destination, distance);
+        //destination.setGear(gear);
+        //System.out.println("From " + this + " Destination " + destination + " Distance " + distance);
+    }
+
+    public void addDestination(Region destination) {
+        if (null == destination || null == this.gear) {
+            return;
+        }
+
+        if (destination.regionType == this.regionType) {
+            if (destination.gear == this.gear) {
+                addDestination(destination, 1);
+            } else {
+                addDestination(destination, 8);
+            }
+            return;
+        }
+
+        switch (this.regionType) {
+            case ROCKY:
+                if (gear == TORCH) {
+                    if (destination.getRegionType() == NARROW && destination.gear == gear) {
+                        addDestination(destination, 1);
+                    }
+                } else if (gear == CLIMBING_GEAR) {
+                    if (destination.getRegionType() == WET && destination.gear == gear) {
+                        addDestination(destination, 1);
+                    }
+                }
+                break;
+            case WET:
+                if (gear == CLIMBING_GEAR) {
+                    if (destination.getRegionType() == ROCKY && destination.gear == gear) {
+                        addDestination(destination, 1);
+                    } else if (destination.getRegionType() == NARROW && destination.gear == NEITHER) {
+                        addDestination(destination, 8);
+                    }
+                } else if (gear == NEITHER) {
+                    if (destination.getRegionType() == ROCKY && destination.gear == CLIMBING_GEAR) {
+                        addDestination(destination, 8);
+                    } else if (destination.getRegionType() == NARROW && destination.gear == gear) {
+                        addDestination(destination, 1);
+                    }
+                }
+                break;
+            case NARROW:
+                if (gear == TORCH) {
+                    if (destination.getRegionType() == ROCKY && destination.gear == gear) {
+                        addDestination(destination, 1);
+                    } else if (destination.getRegionType() == WET && destination.gear == NEITHER) {
+                        addDestination(destination, 8);
+                    }
+                } else if (gear == NEITHER) {
+                    if (destination.getRegionType() == ROCKY && destination.gear == TORCH) {
+                        addDestination(destination, 8);
+                    } else if (destination.getRegionType() == WET && destination.gear == gear) {
+                        addDestination(destination, 1);
+                    }
+                }
+                break;
+        }
     }
 
     public enum RegionType {
@@ -82,5 +130,11 @@ public class Region implements Comparable<Region> {
         public int getType() {
             return type;
         }
+    }
+
+    public enum Gear {
+        TORCH,
+        CLIMBING_GEAR,
+        NEITHER;
     }
 }

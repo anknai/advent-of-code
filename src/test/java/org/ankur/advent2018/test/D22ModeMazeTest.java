@@ -21,5 +21,8 @@ public class D22ModeMazeTest {
     public void getShortestPath() throws Exception {
         int shortestPath = maze.getShortestPath(510, 10, 10);
         assertEquals(45, shortestPath);
+
+        shortestPath = maze.getShortestPath(10647, 7, 770);
+        assertEquals(1039, shortestPath);
     }
 }
