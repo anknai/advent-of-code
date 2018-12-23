@@ -52,7 +52,6 @@ public class D22ModeMaze {
 
     private int shortest() {
         for (Region[] region: regionList) {
-            //System.out.println(region);
             int x = region[0].getX();
             int y = region[0].getY();
             add(region[0], x, y);
