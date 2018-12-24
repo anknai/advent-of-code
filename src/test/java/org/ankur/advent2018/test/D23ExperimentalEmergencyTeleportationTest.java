@@ -23,6 +23,14 @@ public class D23ExperimentalEmergencyTeleportationTest {
     }
 
     @Test
+    public void closest() {
+        int closest = teleportation.closest(INPUT);
+        assertEquals(80250793, closest);
+        //[Bot(pos=<11382526,29059462,39808805>, r=0)]
+        //80250793
+    }
+
+    @Test
     public void parse() throws Exception {
         Bot bot = teleportation.parse("pos=<1,2,24>, r=15");
         assertEquals(1, bot.getX());
