@@ -17,11 +17,9 @@ public class D23ExperimentalEmergencyTeleportation {
 
         for (int i = 0; i < bots.size(); i ++) {
             Bot me = bots.get(i);
-            //me.addNeighbour(me);
             for (Bot nano : bots) {
                 if (me.inRange(nano)) {
-                    //nano.addNeighbour(me);
-                    me.addNeighbour(nano);
+                    me.addNeighbour();
                 }
             }
         }
@@ -34,16 +32,9 @@ public class D23ExperimentalEmergencyTeleportation {
                 closest = bot;
             }
         }
-        System.out.println("Closest is " + closest + " with " + max + " neighbours");
+        System.out.println("Closest is " + closest);
 
-        /*for (Bot me : bots) {
-            System.out.println("=========" + me);
-            for (Bot bot : me.getNear()) {
-                System.out.println(bot);
-            }
-        }*/
-
-        return closest.getNear().size();
+        return closest.getNear();
     }
 
     public Bot parse(String line) {

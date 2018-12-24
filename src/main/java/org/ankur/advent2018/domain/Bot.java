@@ -11,7 +11,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
-@ToString(exclude = {"near"})
+@ToString
 public class Bot {
 
     private int x;
@@ -22,18 +22,14 @@ public class Bot {
 
     private int radii;
 
-    private Set<Bot> near;
+    private int near;
 
     public boolean inRange(Bot other) {
         int distance = Math.abs(other.x - this.x) + Math.abs(other.y - this.y) + Math.abs(other.z - this.z);
-        //int distance = Math.abs(other.x - this.x + other.y - this.y + other.z - this.z);
         return distance <= radii;
     }
 
-    public void addNeighbour(Bot neighbour) {
-        if (null == near) {
-            near = new HashSet<>();
-        }
-        near.add(neighbour);
+    public void addNeighbour() {
+        near++;
     }
 }

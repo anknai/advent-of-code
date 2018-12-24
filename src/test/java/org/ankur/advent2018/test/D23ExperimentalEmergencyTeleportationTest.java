@@ -19,7 +19,7 @@ public class D23ExperimentalEmergencyTeleportationTest {
         assertEquals(7, max);
 
         max = teleportation.max(INPUT);
-        assertEquals(900, max);
+        assertEquals(430, max);
     }
 
     @Test
