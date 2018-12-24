@@ -21,12 +21,8 @@ public class D24ImmuneSystemSimulator {
         List<Group> armies = new ArrayList<>(immune);
         armies.addAll(infection);
         round = 1;
-        while (immuneCount != 0 && infectionCount != 0) {
-            System.out.println("After round " + round + " immune " + immuneCount + " infection " + infectionCount);
-            targetSelection(armies);
-            attack(armies);
-            round++;
-        }
+        targetFound = true;
+        simulate(armies);
         int remaining = 0;
         for (Group group : armies) {
             remaining += group.getUnits();
@@ -36,13 +32,19 @@ public class D24ImmuneSystemSimulator {
 
     public int part2(List<Group> immune, List<Group> infection) {
         int boost = 1;
-        int remaining;
+        int remaining = 0;
         List<Group> originalImmune = immune.stream().map(Group::new).collect(Collectors.toList());
         List<Group> originalInfection = infection.stream().map(Group::new).collect(Collectors.toList());
-        while (true) {
+        int lastFailure = -1;
+        int lastSuccess = -1;
+        while (lastSuccess - lastFailure != 1) {
             immuneCount = immune.size();
             infectionCount = infection.size();
-            boost += 1;
+            if (lastSuccess == -1) {
+                boost *= 2;
+            } else {
+                boost = (lastFailure + lastSuccess) / 2;
+            }
             for (Group immunity : immune) {
                 immunity.setAttackDamage(immunity.getAttackDamage() + boost);
             }
@@ -52,19 +54,16 @@ public class D24ImmuneSystemSimulator {
 
             round = 1;
             targetFound = true;
-            while (targetFound) {
-                targetFound = false;
-                targetSelection(armies);
-                attack(armies);
-                round++;
-            }
+            simulate(armies);
             System.out.println("Using boost " + boost + " took " + round + " rounds " + immuneCount + " " + infectionCount);
-            if (infectionCount == 0) {
+            if (infectionCount > 0) {
+                lastFailure = boost;
+            } else {
+                lastSuccess = boost;
                 remaining = 0;
                 for (Group group : armies) {
                     remaining += group.getUnits();
                 }
-                break;
             }
 
             immune = originalImmune.stream().map(Group::new).collect(Collectors.toList());
@@ -72,6 +71,15 @@ public class D24ImmuneSystemSimulator {
         }
 
         return remaining;
+    }
+
+    private void simulate(List<Group> armies) {
+        while (targetFound) {
+            targetFound = false;
+            targetSelection(armies);
+            attack(armies);
+            round++;
+        }
     }
 
     private void targetSelection(List<Group> army) {
