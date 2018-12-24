@@ -1,9 +1,11 @@
 package org.ankur.advent2018.domain;
 
-import lombok.*;
-
-import java.util.HashSet;
-import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -39,6 +41,7 @@ public class Bot {
 
     public boolean inRange(Bot other) {
         int distance = Math.abs(other.x - this.x) + Math.abs(other.y - this.y) + Math.abs(other.z - this.z);
+        //int distance = Math.abs(other.x - this.x + other.y - this.y + other.z - this.z);
         return distance <= radii;
     }
 

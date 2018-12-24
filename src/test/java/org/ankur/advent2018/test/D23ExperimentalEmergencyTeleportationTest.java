@@ -4,7 +4,7 @@ import org.ankur.advent2018.D23ExperimentalEmergencyTeleportation;
 import org.ankur.advent2018.domain.Bot;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class D23ExperimentalEmergencyTeleportationTest {
 
@@ -14,7 +14,7 @@ public class D23ExperimentalEmergencyTeleportationTest {
     private static final String INPUT = "23_bots.txt";
 
     @Test
-    public void max() throws Exception {
+    public void max() {
         int max = teleportation.max(TEST_INPUT);
         assertEquals(7, max);
 
@@ -31,7 +31,7 @@ public class D23ExperimentalEmergencyTeleportationTest {
     }
 
     @Test
-    public void parse() throws Exception {
+    public void parse() {
         Bot bot = teleportation.parse("pos=<1,2,24>, r=15");
         assertEquals(1, bot.getX());
         assertEquals(2, bot.getY());
