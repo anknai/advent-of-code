@@ -2,16 +2,18 @@ package org.ankur.advent2018;
 
 import org.ankur.advent.util.FileReader;
 import org.ankur.advent2018.domain.Bot;
-import org.ankur.advent2018.domain.Group;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.PriorityQueue;
 
 public class D23ExperimentalEmergencyTeleportation {
 
     private int minX, maxX, minY, maxY, minZ, maxZ;
+
+    private PriorityQueue<Bot> queue;
+
+    private List<Bot> bots;
 
     public int max(String fileName) {
         List<String> lines = FileReader.readFile(fileName);
@@ -44,66 +46,73 @@ public class D23ExperimentalEmergencyTeleportation {
 
     public int closest(String fileName) {
         minX = Integer.MAX_VALUE;
-        minY = minX;
-        minZ = minX;
+        minY = Integer.MAX_VALUE;
+        minZ = Integer.MAX_VALUE;
         maxX = Integer.MIN_VALUE;
-        maxY = maxX;
-        maxZ = maxX;
+        maxY = Integer.MIN_VALUE;
+        maxZ = Integer.MIN_VALUE;
 
         List<String> lines = FileReader.readFile(fileName);
-        List<Bot> bots = new ArrayList<>();
+
+        bots = new ArrayList<>();
         for (String line : lines) {
             bots.add(parse(line));
         }
 
         System.out.println("(" + minX + "," + minY + "," + minZ + "), (" + maxX + "," + maxY + "," + maxZ + ")");
 
-        Bot min = new Bot(minX, minY, minZ);
-        Bot max = new Bot(maxX, maxY, maxZ);
-        howMany(bots, min, max);
+        int radii = Math.abs(maxX - minX) + Math.abs(maxY - minY) + Math.abs(maxZ - minZ);
 
-        for (int i = 0; i < 1; i ++) {
-            int midX = minX + (minX + maxX) / 2;
-            int midY = minY + (minY + maxY) / 2;
-            int midZ = minZ + (minZ + maxZ) / 2;
-            howMany(bots, new Bot(minX, minY, minZ), new Bot(midX, midY, midZ));
-            howMany(bots, new Bot(minX, minY, midZ), new Bot(midX, midY, maxZ));
-            howMany(bots, new Bot(minX, midY, minZ), new Bot(midX, maxY, midZ));
-            howMany(bots, new Bot(minX, midY, midZ), new Bot(midX, maxY, maxZ));
-            howMany(bots, new Bot(midX, minY, minZ), new Bot(maxX, midY, midZ));
-            howMany(bots, new Bot(midX, minY, midZ), new Bot(maxX, midY, maxZ));
-            howMany(bots, new Bot(midX, midY, minZ), new Bot(maxX, maxY, midZ));
-            howMany(bots, new Bot(midX, midY, midZ), new Bot(maxX, maxY, maxZ));
-
-        }
-        return -1;
+        queue = new PriorityQueue<>();
+        //calculate(11382526,29059462,39808805, 0);
+        calculate(minX + (maxX - minX) / 2, minY + (maxY - minY) / 2, minZ + (maxZ - minZ) / 2, radii);
+        int i = 0;
+        Bot center;
+        do {
+            center = queue.poll();
+            System.out.println("Queue size " + queue.size() + " " + center);
+            assert center != null;
+            int x = center.getX();
+            int y = center.getY();
+            int z = center.getZ();
+            radii = center.getRadii();
+            calculate(x - radii / 2, y - radii / 2, z - radii / 2, radii / 2);
+            calculate(x - radii / 2, y - radii / 2, z + radii / 2, radii / 2);
+            calculate(x - radii / 2, y + radii / 2, z - radii / 2, radii / 2);
+            calculate(x - radii / 2, y + radii / 2, z + radii / 2, radii / 2);
+            calculate(x + radii / 2, y - radii / 2, z - radii / 2, radii / 2);
+            calculate(x + radii / 2, y - radii / 2, z + radii / 2, radii / 2);
+            calculate(x + radii / 2, y + radii / 2, z - radii / 2, radii / 2);
+            calculate(x + radii / 2, y + radii / 2, z + radii / 2, radii / 2);
+            calculate(x, y, z, radii / 2);
+            i++;
+        } while (queue.size() > 0 && radii > 1);
+        return center.getX() + center.getY() + center.getZ();
     }
 
-    private int howMany(List<Bot> original, Bot min, Bot max) {
-        List<Bot> bots = original.stream().map(Bot::new).collect(Collectors.toList());
+    private void calculate(int x, int y, int z, int radii) {
+        Bot center = Bot.builder()
+                .x(x)
+                .y(y)
+                .z(z)
+                .radii(radii)
+                .build();
         int count = 0;
-        Iterator<Bot> iterator = bots.iterator();
-        while (iterator.hasNext()) {
-            Bot bot = iterator.next();
-            if (bot.centerInGrid(min, max)) {
-                iterator.remove();
+        for (Bot bot: bots) {
+            if (bot.intersects(center)) {
                 count++;
             }
         }
-        System.out.println("Center in " + min + " " + max + "=" + count);
-        for (int i = min.getX(); i < max.getX(); i ++) {
-            Bot bot = new Bot(i, min.getY(), min.getZ());
-            iterator = bots.iterator();
-            while (iterator.hasNext()) {
-                Bot nano = iterator.next();
-                if (nano.inRange(bot)) {
-                    iterator.remove();
-                    count++;
+        center.setNear(count);
+        if (count > 950) {
+            for (Bot bot: queue) {
+                if (bot.equals(center)) {
+                    return;
                 }
             }
+            System.out.println(center + " added to the queue");
+            queue.add(center);
         }
-        System.out.println("In range " + min + " " + max + "=" + count);
-        return count;
     }
 
     public Bot parse(String line) {
