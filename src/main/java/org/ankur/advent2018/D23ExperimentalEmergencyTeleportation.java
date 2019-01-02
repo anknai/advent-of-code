@@ -41,6 +41,7 @@ public class D23ExperimentalEmergencyTeleportation {
         }
         System.out.println("Closest is " + closest);
 
+        assert closest != null;
         return closest.getNear();
     }
 
@@ -66,11 +67,10 @@ public class D23ExperimentalEmergencyTeleportation {
         queue = new PriorityQueue<>();
         //calculate(11382526,29059462,39808805, 0);
         calculate(minX + (maxX - minX) / 2, minY + (maxY - minY) / 2, minZ + (maxZ - minZ) / 2, radii);
-        int i = 0;
         Bot center;
         do {
             center = queue.poll();
-            System.out.println("Queue size " + queue.size() + " " + center);
+            //System.out.println("Queue size " + queue.size() + " " + center);
             assert center != null;
             int x = center.getX();
             int y = center.getY();
@@ -85,7 +85,6 @@ public class D23ExperimentalEmergencyTeleportation {
             calculate(x + radii / 2, y + radii / 2, z - radii / 2, radii / 2);
             calculate(x + radii / 2, y + radii / 2, z + radii / 2, radii / 2);
             calculate(x, y, z, radii / 2);
-            i++;
         } while (queue.size() > 0 && radii > 1);
         return center.getX() + center.getY() + center.getZ();
     }
@@ -110,7 +109,7 @@ public class D23ExperimentalEmergencyTeleportation {
                     return;
                 }
             }
-            System.out.println(center + " added to the queue");
+            //System.out.println(center + " added to the queue");
             queue.add(center);
         }
     }

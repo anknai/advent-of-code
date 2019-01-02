@@ -12,23 +12,23 @@ public class D14ChocolateCharts {
     private static final int NEXT_RECIPE = 10;
 
     public String nextTen(int recipeCount) {
-        int elv1 = 0;
-        int elv2 = 1;
+        int elf1 = 0;
+        int elf2 = 1;
         recipeList = new IntGapList();
         recipeList.add(3);
         recipeList.add(7);
-        displayRecipes(elv1, elv2);
+        displayRecipes(elf1, elf2);
         while (recipeList.size() < recipeCount + NEXT_RECIPE) {
-            int nextRecipes = recipeList.get(elv1) + recipeList.get(elv2);
+            int nextRecipes = recipeList.get(elf1) + recipeList.get(elf2);
             if (nextRecipes > 9) {
                 recipeList.add(nextRecipes / 10);
                 recipeList.add(nextRecipes % 10);
             } else {
                 recipeList.add(nextRecipes);
             }
-            elv1 = moveElf(elv1);
-            elv2 = moveElf(elv2);
-            displayRecipes(elv1, elv2);
+            elf1 = moveElf(elf1);
+            elf2 = moveElf(elf2);
+            displayRecipes(elf1, elf2);
         }
         StringBuilder returns = new StringBuilder();
         for (int i = recipeCount; i < recipeCount + NEXT_RECIPE; i++) {
@@ -38,16 +38,16 @@ public class D14ChocolateCharts {
     }
 
     public int firstOccurrence(String pattern) {
-        int elv1 = 0;
-        int elv2 = 1;
+        int elf1 = 0;
+        int elf2 = 1;
         recipeList = new IntGapList();
         recipeList.add(3);
         recipeList.add(7);
-        displayRecipes(elv1, elv2);
+        displayRecipes(elf1, elf2);
         StringBuilder returns = new StringBuilder();
 
         while (true) {
-            int nextRecipes = recipeList.get(elv1) + recipeList.get(elv2);
+            int nextRecipes = recipeList.get(elf1) + recipeList.get(elf2);
             if (nextRecipes > 9) {
                 recipeList.add(nextRecipes / 10);
                 returns.append(nextRecipes / 10);
@@ -57,9 +57,9 @@ public class D14ChocolateCharts {
                 recipeList.add(nextRecipes);
                 returns.append(nextRecipes);
             }
-            elv1 = moveElf(elv1);
-            elv2 = moveElf(elv2);
-            displayRecipes(elv1, elv2);
+            elf1 = moveElf(elf1);
+            elf2 = moveElf(elf2);
+            displayRecipes(elf1, elf2);
 
             if (returns.indexOf(pattern) > -1) {
                 int last = recipeList.get(recipeList.size() - 1);
@@ -77,14 +77,14 @@ public class D14ChocolateCharts {
     }
 
 
-    private void displayRecipes(int elv1, int elv2) {
-        if (elv1 > 20 || elv2 > 20) {
+    private void displayRecipes(int elf1, int elf2) {
+        if (elf1 > 20 || elf2 > 20) {
             return;
         }
         for (int i = 0; i < recipeList.size(); i++) {
-            if (i == elv1) {
+            if (i == elf1) {
                 logSameLine("(" + recipeList.get(i) + ")");
-            } else if (i == elv2) {
+            } else if (i == elf2) {
                 logSameLine("[" + recipeList.get(i) + "]");
             } else {
                 logSameLine(" " + recipeList.get(i) + " ");
@@ -93,12 +93,12 @@ public class D14ChocolateCharts {
         newLine();
     }
 
-    private int moveElf(int elv) {
-        elv += recipeList.get(elv) + 1;
+    private int moveElf(int elf) {
+        elf += recipeList.get(elf) + 1;
         int size = recipeList.size();
-        while (elv >= size) {
-            elv = elv % size;
+        while (elf >= size) {
+            elf = elf % size;
         }
-        return elv;
+        return elf;
     }
 }

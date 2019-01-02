@@ -29,8 +29,7 @@ public class D25FourDimensionalAdventure {
     private void scan(List<Space> spaces) {
         Constellation constellation = new Constellation();
         constellations.add(constellation);
-        constellation.addSpace(spaces.get(0));
-        spaces.remove(0);
+        constellation.addSpace(spaces.remove(0));
         boolean still;
         do {
             still = false;

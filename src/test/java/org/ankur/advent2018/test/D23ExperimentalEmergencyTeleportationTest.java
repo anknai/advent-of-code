@@ -27,7 +27,7 @@ public class D23ExperimentalEmergencyTeleportationTest {
         int /*closest = teleportation.closest("23_test_2.txt");
         assertEquals(36, closest);*/
         closest = teleportation.closest(INPUT);
-        assertEquals(80250793, closest);
+        assertEquals(80250783, closest);
         //[Bot(pos=<11382526,29059462,39808805>, r=0)]
         //80250793
     }
