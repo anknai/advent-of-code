@@ -3,6 +3,7 @@ package org.ankur.advent2019.d03;
 import org.ankur.advent.util.FileReader;
 
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -45,9 +46,23 @@ public class CrossedWires {
     }
 
     private int shortest(SortedSet<WirePoint> wire1, SortedSet<WirePoint> wire2) {
+        Set<WirePoint> new1 = new TreeSet<>();
+        Set<WirePoint> new2 = new TreeSet<>();
+        for (WirePoint wirePoint : wire1) {
+            if (wire2.contains(wirePoint)) {
+                new1.add(wirePoint);
+            }
+        }
+
+        for (WirePoint wirePoint : wire2) {
+            if (wire1.contains(wirePoint)) {
+                new2.add(wirePoint);
+            }
+        }
+
         int shortest = Integer.MAX_VALUE;
-        for (WirePoint wirePoint1 : wire1) {
-            for (WirePoint wirePoint2 : wire2) {
+        for (WirePoint wirePoint1 : new1) {
+            for (WirePoint wirePoint2 : new2) {
                 if (wirePoint1.equals(wirePoint2)) {
                     int distance = wirePoint1.getSteps() + wirePoint2.getSteps();
                     if (distance < shortest) {

@@ -17,7 +17,7 @@ public class CrossedWiresTest {
 
     @Test
     public void readFileShortest() {
-        assertEquals(8989, crossedWires.readFileShortest(INPUT));
+        assertEquals(4158, crossedWires.readFileShortest(INPUT));
     }
 
     @Test
