@@ -14,6 +14,10 @@ public class AmplificationCircuit {
         return alarmString(FileReader.readFileAsString(file));
     }
 
+    int alarm2(String file) {
+        return alarmString2(FileReader.readFileAsString(file));
+    }
+
     int alarmString(String inputStr) {
         String[] split = inputStr.split(",");
         List<String> combi = initialize(1234, 43210);
@@ -39,12 +43,11 @@ public class AmplificationCircuit {
         return max;
     }
 
-    long alarmString2(String inputStr) {
+    int alarmString2(String inputStr) {
         String[] split = inputStr.split(",");
         List<String> combi = initialize(56789, 98765);
-        long max = Long.MIN_VALUE;
+        int max = Integer.MIN_VALUE;
         for (String integer : combi) {
-            integer = "97856";
             System.out.println("combi = " + integer);
             halt = false;
             int[] ints = new int[5];
@@ -54,32 +57,34 @@ public class AmplificationCircuit {
             ints[3] = integer.charAt(3) - 48;
             ints[4] = integer.charAt(4) - 48;
 
-            long[] amp1 = Arrays.stream(split).mapToLong(Long::parseLong).toArray();
-            long[] amp2 = Arrays.stream(split).mapToLong(Long::parseLong).toArray();
-            long[] amp3 = Arrays.stream(split).mapToLong(Long::parseLong).toArray();
-            long[] amp4 = Arrays.stream(split).mapToLong(Long::parseLong).toArray();
-            long[] amp5 = Arrays.stream(split).mapToLong(Long::parseLong).toArray();
+            int[] ampA = Arrays.stream(split).mapToInt(Integer::parseInt).toArray();
+            int[] ampB = Arrays.stream(split).mapToInt(Integer::parseInt).toArray();
+            int[] ampC = Arrays.stream(split).mapToInt(Integer::parseInt).toArray();
+            int[] ampD = Arrays.stream(split).mapToInt(Integer::parseInt).toArray();
+            int[] ampE = Arrays.stream(split).mapToInt(Integer::parseInt).toArray();
             for (int i = 0; i < 5; i++) {
                 ips[i] = 0;
             }
-            opCode2(amp1, ints[0], 0);
-            opCode2(amp2, ints[1], 1);
-            opCode2(amp3, ints[2], 2);
-            opCode2(amp4, ints[3], 3);
-            opCode2(amp5, ints[4], 4);
-            long input = 0;
+            int input = 0;
+            input = opCode2(ampA, ints[0], 0, input);
+            input = opCode2(ampB, ints[1], 1, input);
+            input = opCode2(ampC, ints[2], 2, input);
+            input = opCode2(ampD, ints[3], 3, input);
+            input = opCode2(ampE, ints[4], 4, input);
+            System.out.println(Arrays.toString(ampA));
+            System.out.println(Arrays.toString(ampB));
+            System.out.println(Arrays.toString(ampC));
+            System.out.println(Arrays.toString(ampD));
+            System.out.println(Arrays.toString(ampE));
             while (!halt) {
-                //System.out.println("Not halted yet " + integer + " " + input);
-                input = opCode2(amp1, input, 0);
-                input = opCode2(amp2, input, 1);
-                input = opCode2(amp3, input, 2);
-                input = opCode2(amp4, input, 3);
-                input = opCode2(amp5, input, 4);
+                input = opCode2(ampA, input, 0, 0);
+                input = opCode2(ampB, input, 1, 0);
+                input = opCode2(ampC, input, 2, 0);
+                input = opCode2(ampD, input, 3, 0);
+                input = opCode2(ampE, input, 4, 0);
             }
-            if (input > max) {
-                max = input;
-                System.out.println(input + " " + integer);
-            }
+            max = Math.max(input, max);
+            System.out.println(max);
         }
         return max;
     }
@@ -112,24 +117,24 @@ public class AmplificationCircuit {
         return combi;
     }
 
-    private long opCode2(long[] array, long input, int ip) {
+    private int opCode2(int[] array, int input, int ip, int input2) {
         int index = ips[ip];
-        while (array[index] != 99) {
-            long opcodeStr = array[index];
-            long opcode = opcodeStr % 100;
+        int occur = 0;
+        while (true) {
+            int opcodeStr = array[index];
+            int opcode = opcodeStr % 100;
             if (opcode == 99) {
-                System.out.println("Halting on " + input);
                 halt = true;
                 break;
             }
-            long modes = opcodeStr / 100;
-            long mode1 = modes % 10;
-            long mode2 = (modes / 10) % 10;
+            int modes = opcodeStr / 100;
+            int mode1 = modes % 10;
+            int mode2 = (modes / 10) % 10;
 
-            long value = 0;
+            int value = 0;
             if (opcode == 1 || opcode == 2 || opcode == 5 || opcode == 6 || opcode == 7 || opcode == 8) {
-                long firstValue = parameter(mode1, array, ++index);
-                long secondValue = parameter(mode2, array, ++index);
+                int firstValue = parameter(mode1, array, ++index);
+                int secondValue = parameter(mode2, array, ++index);
 
                 if (opcode == 1) {
                     value = firstValue + secondValue;
@@ -137,12 +142,12 @@ public class AmplificationCircuit {
                     value = firstValue * secondValue;
                 } else if (opcode == 5) {
                     if (firstValue != 0) {
-                        index = (int)secondValue;
+                        index = secondValue;
                         continue;
                     }
                 } else if (opcode == 6) {
                     if (firstValue == 0) {
-                        index = (int) secondValue;
+                        index = secondValue;
                         continue;
                     }
                 } else if (opcode == 7) {
@@ -157,17 +162,23 @@ public class AmplificationCircuit {
             }
 
             if (opcode == 3) {
-                value = input;
+                if (occur == 0) {
+                    value = input;
+                    occur++;
+                } else {
+                    //System.out.println("Using second value " + input2);
+                    value = input2;
+                }
             } else if (opcode == 4) {
-                int valuePointer = (int) array[++index];
+                int valuePointer = array[++index];
                 assert valuePointer < array.length;
                 ips[ip] = ++index;
-                System.out.println(ips[ip] + " index " + array[valuePointer]);
+                //System.out.println(ips[ip] + " index " + array[valuePointer]);
                 return array[valuePointer];
             }
 
             if (opcode != 5 && opcode != 6) {
-                int valuePointer = (int) array[++index];
+                int valuePointer = array[++index];
                 if (valuePointer >= array.length) {
                     System.out.println("BREAK " + opcode + " " + Arrays.toString(array) + " " + valuePointer);
                     break;
@@ -271,19 +282,6 @@ public class AmplificationCircuit {
         int value;
         if (mode == 0) {
             pointer = array[index];
-            assert pointer < array.length;
-            value = array[pointer];
-        } else {
-            value = array[index];
-        }
-        return value;
-    }
-
-    private long parameter(long mode, long[] array, int index) {
-        int pointer;
-        long value;
-        if (mode == 0) {
-            pointer = (int) array[index];
             assert pointer < array.length;
             value = array[pointer];
         } else {
