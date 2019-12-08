@@ -11,7 +11,7 @@ public class SpaceImageFormatTest extends SpaceImageFormat {
 
     @Test
     public void readFile() {
-        assertEquals(78, super.readFile(TEST_INPUT, 25, 6));
+        assertEquals(2016, super.readFile(TEST_INPUT, 25, 6));
     }
 
     @Test
