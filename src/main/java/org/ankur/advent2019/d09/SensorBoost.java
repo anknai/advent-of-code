@@ -16,8 +16,7 @@ public class SensorBoost {
         long[] array = Arrays.stream(split).mapToLong(Long::parseLong).toArray();
         long[] copy = new long[array.length + 100000000];
         System.arraycopy(array, 0, copy, 0, array.length);
-        array = copy;
-        input = opCode(array, input);
+        input = opCode(copy, input);
         return input;
     }
 
@@ -33,6 +32,7 @@ public class SensorBoost {
             int modes = (int) opcodeStr / 100;
             int mode1 = modes % 10;
             int mode2 = (modes / 10) % 10;
+            int mode = (modes / 100 );
             long value = 0;
 
             if (opcode == 1 || opcode == 2 || opcode == 5 || opcode == 6 || opcode == 7 || opcode == 8) {
@@ -65,22 +65,24 @@ public class SensorBoost {
             }
 
             if (opcode == 3) {
+                System.out.println(" 3 " + opcodeStr);
+                mode = mode1;
                 value = input;
             } else if (opcode == 4) {
                 input = parameter(mode1, array, ++index, relativeBase);
-                System.out.println("Input " + input);
+                System.out.println("Output " + input);
             } else if (opcode == 9) {
                 relativeBase += parameter(mode1, array, ++index, relativeBase);;
             }
 
-            if (opcode != 4 && opcode != 5 && opcode != 6) {
+            if (opcode != 4 && opcode != 5 && opcode != 6 && opcode != 9) {
                 int valuePointer = (int) array[++index];
-                if (valuePointer >= array.length || valuePointer < 0) {
-                    System.out.println(opcode);
-                    //System.out.println(Arrays.toString(array));
-                    System.out.println(valuePointer);
-                    continue;
+                if (mode == 2) {
+                    valuePointer += relativeBase;
                 }
+                assert valuePointer < array.length;
+                assert valuePointer >= 0;
+
                 array[valuePointer] = value;
             }
 
@@ -104,8 +106,9 @@ public class SensorBoost {
         } else if (mode == 1) {
             value = array[index];
         } else {
-            pointer = (int) array[index + relativeBase];
-            assert pointer < array.length && pointer >= 0;
+            pointer = (int) array[index] + relativeBase;
+            assert pointer < array.length;
+            assert pointer >= 0;
             value = array[pointer];
         }
         return value;

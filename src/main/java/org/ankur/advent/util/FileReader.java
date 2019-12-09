@@ -9,7 +9,7 @@ import java.util.TreeSet;
 
 public class FileReader {
 ///Users/anknai/IdeaProjects/advent-of-code/src/test/resources/2019_08.txt
-    private static final String PATH = "/Users/anknai/IdeaProjects/advent-of-code/src/test/resources/";
+    private static final String PATH = "/home/ye18xu/projects/advent-of-code/src/test/resources/";
 
     private FileReader() {
 
