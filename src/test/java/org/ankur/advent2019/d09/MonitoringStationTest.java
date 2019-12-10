@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class SensorBoostTest extends SensorBoost {
+public class MonitoringStationTest extends SensorBoost {
 
     private final static String INPUT = "2019_09.txt";
 
