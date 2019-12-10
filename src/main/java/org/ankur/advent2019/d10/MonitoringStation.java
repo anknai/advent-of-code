@@ -15,6 +15,8 @@ public class MonitoringStation {
 
     private int maxY = 0;
 
+    private int vapor = 0;
+
     public int readFile1(String inputFile) {
         List<String> s = FileReader.readFile(inputFile);
         init(s);
@@ -32,7 +34,69 @@ public class MonitoringStation {
         Asteroid asteroid = asteroids.get(i - 1);
         int count = calculate(asteroid);
         System.out.println(count);
+        while (vapor < 200) {
+            System.out.println("Next round " + vapor);
+            start(asteroid);
+        }
         return 0;
+    }
+
+    private void start(Asteroid asteroid) {
+        int x = asteroid.getX();
+        int y = asteroid.getY();
+        for (int i = x; i < maxX; i++) {
+            for (int j = 0; j < y; j ++) {
+                if (kill(i, j)) {
+                    break;
+                }
+            }
+        }
+        for (int i = maxX - 1; i >= 0; i--) {
+            for (int j = maxY - 1; j > y; j --) {
+                if (kill(i, j)) {
+                    break;
+                }
+            }
+        }
+        /*for (int i = 0; i < x; i++) {
+            for (int j = maxY - 1; j > y; j --) {
+                if (kill(i, j)) {
+                    break;
+                }
+            }
+        }*/
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j ++) {
+                if (kill(i, j)) {
+                    break;
+                }
+            }
+        }
+        asteroids.removeIf(Asteroid::isVaporized);
+        for (int i = 0; i < asteroids.size(); i++) {
+            Asteroid asteroid1 = asteroids.get(i);
+            map[asteroid1.getX()][asteroid1.getY()] = i+1;
+        }
+        calculate(asteroid);
+    }
+
+    private boolean kill(int x, int y) {
+        int i1 = map[x][y];
+        if (i1 > 0) {
+            Asteroid done = asteroids.get(i1 - 1);
+            if (done.isVaporized() || !done.isInSight()) {
+                return false;
+            }
+            System.out.println("Vaporized " + done + " at " + ++vapor);
+            done.setVaporized(true);
+            //asteroids.remove(done);
+            map[x][y] = 0;
+            if (vapor == 200) {
+                System.out.println("Found " + done);
+            }
+            return true;
+        }
+        return false;
     }
 
     private int iterate() {

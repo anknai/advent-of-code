@@ -11,7 +11,15 @@ public class Asteroid {
 
     private int y;
 
-    private int total;
+    public boolean isVaporized() {
+        return vaporized;
+    }
+
+    public void setVaporized(boolean vaporized) {
+        this.vaporized = vaporized;
+    }
+
+    private boolean vaporized;
 
     private boolean inSight = false;
 
@@ -34,14 +42,6 @@ public class Asteroid {
 
     public void setY(int y) {
         this.y = y;
-    }
-
-    public int getTotal() {
-        return total;
-    }
-
-    public void setTotal(int total) {
-        this.total = total;
     }
 
     public boolean isInSight() {
