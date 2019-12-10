@@ -21,6 +21,20 @@ public class MonitoringStation {
         return iterate();
     }
 
+    public int readFile2(String inputFile, int x, int y) {
+        List<String> s = FileReader.readFile(inputFile);
+        init(s);
+        return vaporize(x, y);
+    }
+
+    private int vaporize(int x, int y) {
+        int i = map[x][y];
+        Asteroid asteroid = asteroids.get(i - 1);
+        int count = calculate(asteroid);
+        System.out.println(count);
+        return 0;
+    }
+
     private int iterate() {
         int max = Integer.MIN_VALUE;
         for (Asteroid asteroid : asteroids) {
@@ -140,7 +154,7 @@ public class MonitoringStation {
 
     private boolean found(int x, int y, Asteroid other) {
         if (map[x][y] != 0) {
-            System.out.println("Found someone at " + x + " " + y + " blocking " + other);
+            //System.out.println("Found someone at " + x + " " + y + " blocking " + other);
             other.setInSight(false);
             return true;
         }
@@ -151,7 +165,7 @@ public class MonitoringStation {
         int i = map[x][y];
         if (i != 0) {
             Asteroid other = asteroids.get(i - 1);
-            System.out.println(other + " is out of sight");
+            //System.out.println(other + " is out of sight");
             other.setInSight(false);
         }
     }

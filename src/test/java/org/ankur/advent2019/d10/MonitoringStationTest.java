@@ -19,7 +19,12 @@ public class MonitoringStationTest extends MonitoringStation {
 
     @Test
     public void test2() {
-        assertEquals(8, super.readFile1(INPUT));
+        assertEquals(288, super.readFile1(INPUT));
+    }
+
+    @Test
+    public void test3() {
+        assertEquals(288, super.readFile2(INPUT, 17, 22));
     }
 
 }
