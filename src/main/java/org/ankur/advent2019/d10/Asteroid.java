@@ -1,11 +1,13 @@
 package org.ankur.advent2019.d10;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @ToString
-public class Asteroid {
+public class Asteroid implements Comparable<Asteroid> {
 
     private int x;
 
@@ -23,32 +25,15 @@ public class Asteroid {
 
     private boolean inSight = false;
 
+    private double slope;
+
     public Asteroid(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public boolean isInSight() {
-        return inSight;
-    }
-
-    public void setInSight(boolean inSight) {
-        this.inSight = inSight;
+    @Override
+    public int compareTo(Asteroid asteroid) {
+        return Double.compare(this.slope, asteroid.slope);
     }
 }
