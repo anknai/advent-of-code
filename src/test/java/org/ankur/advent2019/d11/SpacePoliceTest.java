@@ -11,6 +11,11 @@ public class SpacePoliceTest extends SpacePolice {
 
     @Test
     public void alarm() {
-        assertEquals(2204990589L, super.alarm(INPUT));
+        assertEquals(2212L, super.alarm(INPUT));
+    }
+
+    @Test
+    public void alarm2() {
+       super.alarm2(INPUT);
     }
 }

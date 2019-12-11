@@ -6,9 +6,48 @@ import java.util.*;
 
 public class SpacePolice {
 
+    private int index = 0;
+
+    private int relativeBase = 0;
+    private Map<Integer, Panel> indexMap;
+    int max = 160;
+
     public long alarm(String inputFile) {
+        index = 0;
+        relativeBase = 0;
+        indexMap = new HashMap<>();
         String s = FileReader.readFileAsString(inputFile);
         return alarmString(s, 0);
+    }
+
+    public void alarm2(String inputFile) {
+        indexMap = new HashMap<>();
+        index = 0;
+        relativeBase = 0;
+        String s = FileReader.readFileAsString(inputFile);
+        alarmString(s, 1);
+        char[][] map = new char[max][max];
+        for (int y = 0; y < max; y++) {
+            for (int x = 0; x < max; x++) {
+                map[x][y] = ' ';
+            }
+        }
+        for (Map.Entry<Integer, Panel> integerPanelEntry : indexMap.entrySet()) {
+            Integer integer = integerPanelEntry.getKey();
+            int x = integer / 1000;
+            int y = integer % 1000;
+            //System.out.println(integer);
+            if (integerPanelEntry.getValue().getColor() == 1) {
+                map[x][y] = '#';
+            }
+        }
+
+        for (int y = 0; y < max; y++) {
+            for (int x = 0; x < max; x++) {
+                System.out.print(map[x][y]);
+            }
+            System.out.println();
+        }
     }
 
     long alarmString(String inputStr, long input) {
@@ -16,17 +55,21 @@ public class SpacePolice {
         long[] array = Arrays.stream(split).mapToLong(Long::parseLong).toArray();
         long[] copy = new long[array.length + 1000000];
         System.arraycopy(array, 0, copy, 0, array.length);
-        Map<Integer, Panel> indexMap = new HashMap<>();
-        int x = 500;
-        int y = 500;
-        Panel panel = new Panel(x, y, false, 0);
+
+        int x = max/2;
+        int y = max/2;
+        Panel panel = new Panel(x, y, false, (int)input);
         //panels.add(panel);
         indexMap.put(x * 1000 + y, panel);
         //direction UP, LEFT, RIGHT, DOWN
         char direction = '^';
         while(input != -1) {
-            System.out.println("Working on panel " + panel + " direction " + direction);
+            //System.out.println("Working on panel " + panel + " direction " + direction + " index " + index + " " + copy[index]);
             input = opCode(copy, panel.getColor());
+            if (input == -1) {
+                System.out.println("Ending");
+                return indexMap.size();
+            }
             panel.setColor((int)input);
             input = opCode(copy, input);
             if (input == -1) {
@@ -59,17 +102,17 @@ public class SpacePolice {
                         direction = '>';
                         x++;
                         break;
-                    case '<':
-                        direction = '^';
-                        y--;
+                    case '>':
+                        direction = 'v';
+                        y++;
                         break;
                     case 'v':
                         direction = '<';
                         x--;
                         break;
-                    case '>':
-                        direction = 'v';
-                        y++;
+                    case '<':
+                        direction = '^';
+                        y--;
                         break;
                 }
             }
@@ -78,7 +121,6 @@ public class SpacePolice {
             if (panel == null) {
                 panel = new Panel(x, y, false, 0);
                 indexMap.put(x * 1000 + y, panel);
-                //panels.add(panel);
             } else {
                 panel.setPainted(true);
             }
@@ -87,8 +129,12 @@ public class SpacePolice {
     }
 
     private long opCode(long[] array, long input) {
-        int index = 0;
-        int relativeBase = 0;
+         //int index = 0;
+
+         //int relativeBase = 0;
+        if (array[index] == 99) {
+            return -1;
+        }
         while (array[index] != 99) {
             long opcodeStr = array[index];
             long opcode = opcodeStr % 100;
@@ -136,11 +182,13 @@ public class SpacePolice {
                 value = input;
             } else if (opcode == 4) {
                 input = parameter(mode1, array, ++index, relativeBase);
+                ++index;
+                return input;
             } else if (opcode == 9) {
                 relativeBase += parameter(mode1, array, ++index, relativeBase);;
             }
 
-            if (opcode != 4 && opcode != 5 && opcode != 6 && opcode != 9) {
+            if (opcode != 5 && opcode != 6 && opcode != 9) {
                 int valuePointer = (int) array[++index];
                 if (mode == 2) {
                     valuePointer += relativeBase;
