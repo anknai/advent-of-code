@@ -28,6 +28,6 @@ public class MoonWalker2Test extends MoonWalker2 {
         moons.add(new Moon(-9, 0, -4));
         moons.add(new Moon(4, 6, 0));
         super.walk1(moons, 1000000);
-        assertEquals(2772, super.lcm(186028, 193052, 144624));
+        assertEquals(324_618_307_124_784L, super.lcm(186028, 193052, 144624));
     }
 }
