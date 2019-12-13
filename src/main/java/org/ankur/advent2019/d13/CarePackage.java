@@ -9,6 +9,7 @@ public class CarePackage {
     private int index = 0;
 
     private int relativeBase = 0;
+    private boolean halt;
 
     public long alarm(String inputFile) {
         index = 0;
@@ -17,8 +18,62 @@ public class CarePackage {
         return alarmString(s, 0);
     }
 
-    public void alarm2(String inputFile) {
+    public long alarm2(String inputFile) {
+        index = 0;
+        relativeBase = 0;
+        String s = FileReader.readFileAsString(inputFile);
+        return alarmString2(s, 2);
+    }
 
+    long alarmString2(String inputStr, long input) {
+        String[] split = inputStr.split(",");
+        long[] array = Arrays.stream(split).mapToLong(Long::parseLong).toArray();
+        long[] copy = new long[array.length + 1000000];
+        System.arraycopy(array, 0, copy, 0, array.length);
+        long output = input;
+        Set<Item> items = new HashSet<>();
+        Item ball = null;
+        Item paddle = null;
+        long score = 0;
+        copy[0] = 2;
+        while (!halt) {
+            output = opCode(copy, output);
+            long x = output;
+            output = opCode(copy, output);
+            long y = output;
+            output = opCode(copy, output);
+            long z = output;
+            //System.out.println(x + " " + y + " z" + z);
+            if (z == 4) {
+                //System.out.println("BBBBBBBBB Ball at " + x + " " + y);
+                ball = new Item(x, y, 'b');
+                if (items.contains(ball)) {
+                    System.out.println("Removing block from " + x + " " + y);
+                    items.remove(ball);
+                }
+            } else if (z == 3) {
+                //System.out.println("PPPPPPPPP Paddel at " + x + " " + y);
+                paddle = new Item(x, y, 'p');
+            } else if (z == 2) {
+                //System.out.println("Block at " + x + " " + y);
+                Item block = new Item(x, y, '#');
+                items.add(block);
+            }
+            if (null != paddle && null != ball) {
+                if (ball.getX() < paddle.getX()) {
+                    output = -1;
+                } else if (ball.getX() == paddle.getX()) {
+                    output = 0;
+                } else {
+                    output = 1;
+                }
+            }
+            if (x == -1 && y == 0) {
+                System.out.println("New Score " + score);
+                score = z;
+            }
+        }
+        return score;
     }
 
     long alarmString(String inputStr, long input) {
@@ -28,7 +83,7 @@ public class CarePackage {
         System.arraycopy(array, 0, copy, 0, array.length);
         long output = input;
         int count = 0;
-        while (output != -1) {
+        while (!halt) {
             output = opCode(copy, output);
             long x = output;
             output = opCode(copy, output);
@@ -45,14 +100,17 @@ public class CarePackage {
 
     private long opCode(long[] array, long input) {
         if (array[index] == 99) {
-            return -1;
+            System.out.println("Halting");
+            halt = true;
+            return -1L;
         }
         while (array[index] != 99) {
             long opcodeStr = array[index];
             long opcode = opcodeStr % 100;
             if (opcode == 99) {
+                halt = true;
                 System.out.println("Breaking up now");
-                return -1L;
+                return -1;
             }
             int modes = (int) opcodeStr / 100;
             int mode1 = modes % 10;

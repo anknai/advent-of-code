@@ -10,11 +10,12 @@ public class CarePackageTest extends CarePackage {
 
     @Test
     public void alarm() {
-        assertEquals(2212L, super.alarm(INPUT));
+        assertEquals(180L, super.alarm(INPUT));
     }
 
     @Test
     public void testAlarm2() {
+        assertEquals(8777L, super.alarm2(INPUT));
     }
 
     @Test
