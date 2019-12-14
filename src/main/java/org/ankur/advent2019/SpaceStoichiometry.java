@@ -40,10 +40,40 @@ public class SpaceStoichiometry {
         return count;
     }
 
+    public long ore3(String file, int limit) {
+        List<String> strings = FileReader.readFile(file);
+        chemicals = new HashMap<>();
+        outputs(strings);
+        inputs(strings);
+        long target = 1_000_000_000_000L;
+        initOre(Long.MAX_VALUE);
+        long start = target / limit;
+        long works = start;
+        long doesnt = start * 2;
+        while (true) {
+            initOre(Long.MAX_VALUE);
+            produce("FUEL", start);
+            long remaining = produced.get("ORE");
+            long used = Long.MAX_VALUE - remaining;
+            System.out.println("took " + used + " to generate " + start + " left " + (target - used) );
+            if (used < target) {
+                works = start;
+                start = (works + doesnt) / 2;
+                if (target - used < limit) {
+                    break;
+                }
+            } else {
+                doesnt = start;
+                start -= (doesnt - works) / 2;
+            }
+            System.out.println("range " + works + "  " + doesnt);
+        }
+        return start;
+    }
+
     private void initOre(long limit) {
         produced = new HashMap<>();
         produced.put("ORE", limit);
-        //System.out.println("Produced ORE " + Integer.MAX_VALUE);
         for (String s : chemicals.keySet()) {
             produced.put(s, 0L);
         }

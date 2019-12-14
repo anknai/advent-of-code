@@ -18,6 +18,6 @@ public class SpaceStoichiometryTest extends SpaceStoichiometry {
 
     @Test
     public void testOre2() {
-        assertEquals(2521844, super.ore2("2019_14.txt", 579797));
+        assertEquals(2521844, super.ore3("2019_14.txt", 579797));
     }
 }
