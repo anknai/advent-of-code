@@ -1,13 +1,10 @@
 package org.ankur.advent2019.d14;
 
-import org.ankur.advent2019.SpaceStoichiometry;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class SpaceStoichiometryTest extends SpaceStoichiometry {
-
-    private final static String INPUT = "2019_14.txt";
 
     @Test
     public void testOre() {
@@ -18,6 +15,12 @@ public class SpaceStoichiometryTest extends SpaceStoichiometry {
 
     @Test
     public void testOre2() {
+        assertEquals(2521844, super.ore2("2019_14.txt", 1_000_000_000_000L, 579797));
+    }
+
+    @Test
+    public void testOre3() {
         assertEquals(2521844, super.ore3("2019_14.txt", 579797));
     }
+
 }

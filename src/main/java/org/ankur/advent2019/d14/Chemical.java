@@ -1,4 +1,4 @@
-package org.ankur.advent2019;
+package org.ankur.advent2019.d14;
 
 import lombok.ToString;
 

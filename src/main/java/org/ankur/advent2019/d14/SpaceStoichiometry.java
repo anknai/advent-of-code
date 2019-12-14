@@ -1,8 +1,11 @@
-package org.ankur.advent2019;
+package org.ankur.advent2019.d14;
 
 import org.ankur.advent.util.FileReader;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class SpaceStoichiometry {
 
@@ -20,13 +23,14 @@ public class SpaceStoichiometry {
         return Integer.MAX_VALUE - produced.get("ORE");
     }
 
-    public long ore2(String file, int limit) {
+    public long ore2(String file, long qty, int limit) {
         List<String> strings = FileReader.readFile(file);
         chemicals = new HashMap<>();
         outputs(strings);
         inputs(strings);
-        initOre(1_000_000_000_000L);
-        int count = 0;
+        initOre(qty);
+        long count = qty / limit;
+        produce("FUEL", count);
         while (produced.get("ORE") > limit) {
             produce("FUEL", 1L);
             count++;
