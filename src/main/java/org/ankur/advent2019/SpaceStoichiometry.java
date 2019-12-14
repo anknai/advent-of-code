@@ -8,24 +8,44 @@ public class SpaceStoichiometry {
 
     private Map<String, Chemical> chemicals = null;
 
-    private Map<String, Integer> produced = null;
+    private Map<String, Long> produced = null;
 
-    public int ore(String file) {
+    public long ore(String file) {
         List<String> strings = FileReader.readFile(file);
         chemicals = new HashMap<>();
         outputs(strings);
         inputs(strings);
-        initOre();
-        produce("FUEL", 1);
+        initOre(Integer.MAX_VALUE);
+        produce("FUEL", 1L);
         return Integer.MAX_VALUE - produced.get("ORE");
     }
 
-    private void initOre() {
+    public long ore2(String file, int limit) {
+        List<String> strings = FileReader.readFile(file);
+        chemicals = new HashMap<>();
+        outputs(strings);
+        inputs(strings);
+        initOre(1_000_000_000_000L);
+        int count = 0;
+        while (produced.get("ORE") > limit) {
+            produce("FUEL", 1L);
+            count++;
+            if (count % 1000 == 0) {
+                System.out.print(".");
+            }
+            if (count % 100000 == 0) {
+                System.out.println(count);
+            }
+        }
+        return count;
+    }
+
+    private void initOre(long limit) {
         produced = new HashMap<>();
-        produced.put("ORE", Integer.MAX_VALUE);
-        System.out.println("Produced ORE " + Integer.MAX_VALUE);
+        produced.put("ORE", limit);
+        //System.out.println("Produced ORE " + Integer.MAX_VALUE);
         for (String s : chemicals.keySet()) {
-            produced.put(s, 0);
+            produced.put(s, 0L);
         }
     }
 
@@ -40,7 +60,6 @@ public class SpaceStoichiometry {
             for (String s : inputs) {
                 Chemical chemical1 = split(s);
                 if (null != chemical2) {
-                    //System.out.println("Adding " + chemical1 + " to " + chemical2);
                     chemical2.addChemical(chemical1);
                 }
             }
@@ -63,23 +82,23 @@ public class SpaceStoichiometry {
         return new Chemical(quantity, output);
     }
 
-    private void produce(String formula, Integer quantity) {
-        System.out.println("Need " + formula + " " + quantity);
-        Integer integer = produced.get(formula);
+    private void produce(String formula, Long quantity) {
+        //System.out.println("Need " + formula + " " + quantity);
+        Long integer = produced.get(formula);
         if (integer >= quantity) {
             integer -= quantity;
-            System.out.println(formula + " already produced remaining " + integer);
+            //System.out.println(formula + " already produced remaining " + integer);
             produced.put(formula, integer);
         }
         else {
-            int required = (quantity - integer);
-            System.out.println("Producing " + formula + " " + required);
+            long required = (quantity - integer);
+            //System.out.println("Producing " + formula + " " + required);
             Chemical chemical = chemicals.get(formula);
-            int multiple;
+            long multiple;
             if (required <= chemical.getQuantity()) {
                 multiple = 1;
             } else {
-                int mode = required % chemical.getQuantity();
+                long mode = required % chemical.getQuantity();
                 multiple = required / chemical.getQuantity();
                 if (mode != 0) {
                     multiple++;

@@ -8,7 +8,7 @@ import java.util.Set;
 @ToString(exclude = "chemicals")
 public class Chemical {
 
-    private int quantity;
+    private long quantity;
 
     private String formula;
 
@@ -20,11 +20,11 @@ public class Chemical {
         chemicalSet = new HashSet<>();
     }
 
-    public int getQuantity() {
+    public long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(long quantity) {
         this.quantity = quantity;
     }
 
