@@ -94,7 +94,8 @@ public class Point implements Comparable<Point> {
         ME('X'),
         ROOM('.'),
         HOR_DOOR('-'),
-        VER_DOOR('|');
+        VER_DOOR('|'),
+        OXYGEN('O');
 
         private char type;
 
