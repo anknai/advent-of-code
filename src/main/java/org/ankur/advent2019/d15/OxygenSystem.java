@@ -233,7 +233,7 @@ public class OxygenSystem {
     }
 
     private void print() {
-        System.out.println("New round");
+        System.out.println("=====================================================");
         for (int y = 0; y < maxY; y++) {
             for (int x = 0; x < maxX; x++) {
                 System.out.print(system[x][y]);
