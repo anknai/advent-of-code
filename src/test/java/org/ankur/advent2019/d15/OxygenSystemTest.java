@@ -2,7 +2,7 @@ package org.ankur.advent2019.d15;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class OxygenSystemTest extends OxygenSystem {
 
@@ -10,12 +10,12 @@ public class OxygenSystemTest extends OxygenSystem {
 
 
     @Test
-    public void alarm() {
-        assertEquals(216, super.alarm(INPUT));
+    public void distance() {
+        assertEquals(216, super.distance(INPUT));
     }
 
     @Test
-    public void alarm2() {
-        assertEquals(326, super.alarm2(INPUT));
+    public void timeTaken() {
+        assertEquals(326, super.timeTaken(INPUT));
     }
 }

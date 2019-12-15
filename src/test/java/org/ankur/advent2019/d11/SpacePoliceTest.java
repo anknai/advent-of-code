@@ -2,7 +2,7 @@ package org.ankur.advent2019.d11;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class SpacePoliceTest extends SpacePolice {
 
@@ -10,12 +10,12 @@ public class SpacePoliceTest extends SpacePolice {
 
 
     @Test
-    public void alarm() {
-        assertEquals(2212L, super.alarm(INPUT));
+    public void count() {
+        assertEquals(2212L, super.count(INPUT));
     }
 
     @Test
-    public void alarm2() {
-       super.alarm2(INPUT);
+    public void registration() {
+       super.registration(INPUT);
     }
 }

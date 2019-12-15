@@ -6,12 +6,12 @@ import java.util.Arrays;
 
 public class SensorBoost {
 
-    public long alarm(String inputFile, long input) {
+    public long keycode(String inputFile, long input) {
         String s = FileReader.readFileAsString(inputFile);
-        return alarmString(s, input);
+        return run(s, input);
     }
 
-    long alarmString(String inputStr, long input) {
+    long run(String inputStr, long input) {
         String[] split = inputStr.split(",");
         long[] array = Arrays.stream(split).mapToLong(Long::parseLong).toArray();
         long[] copy = new long[array.length + 100000000];

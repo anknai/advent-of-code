@@ -3,17 +3,16 @@ package org.ankur.advent2019.d15;
 import org.ankur.advent.util.FileReader;
 import org.ankur.advent2018.Dijkstra;
 import org.ankur.advent2018.domain.Point;
-import org.ankur.advent2019.d13.Item;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.TreeMap;
 
-import static org.ankur.advent2018.domain.Point.AreaType.*;
+import static org.ankur.advent2018.domain.Point.AreaType.OXYGEN;
+import static org.ankur.advent2018.domain.Point.AreaType.ROOM;
+import static org.ankur.advent2018.domain.Point.AreaType.WALL;
 
 public class OxygenSystem {
 
@@ -33,18 +32,20 @@ public class OxygenSystem {
 
     List<OxygenPoint> points;
 
-    public long alarm(String inputFile) {
+    public long distance(String inputFile) {
         index = 0;
         relativeBase = 0;
         String s = FileReader.readFileAsString(inputFile);
-        return alarmString(s);
+        long output = run(s);
+        print();
+        return output;
     }
 
-    public long alarm2(String inputFile) {
+    public long timeTaken(String inputFile) {
         index = 0;
         relativeBase = 0;
         String s = FileReader.readFileAsString(inputFile);
-        alarmString(s);
+        run(s);
         int count = 0;
         boolean none = false;
         while (!none) {
@@ -78,7 +79,7 @@ public class OxygenSystem {
         return count;
     }
 
-    long alarmString(String inputStr) {
+    long run(String inputStr) {
         String[] split = inputStr.split(",");
         long[] array = Arrays.stream(split).mapToLong(Long::parseLong).toArray();
         long[] copy = new long[array.length + 1000000];
@@ -130,7 +131,6 @@ public class OxygenSystem {
             direction = changeDirection();
         }
         System.out.println("count " + count);
-        print();
         return calculate();
     }
 
@@ -140,7 +140,7 @@ public class OxygenSystem {
         Point oxygen = null;
         for (int y = 0; y < maxY; y++) {
             for (int x = 0; x < maxX; x++) {
-                if (system[x][y] == '\0') {
+                if (system[x][y] == '\0' || system[x][y] == '#') {
                     continue;
                 }
                 OxygenPoint point = new OxygenPoint();
@@ -183,6 +183,9 @@ public class OxygenSystem {
             }
         }
         Dijkstra.calculateShortestPathFromSource(start);
+        for (Point point : oxygen.getShortestPath()) {
+            system[point.getX()][point.getY()] = '\u2588';
+        }
         return oxygen.getDistance();
     }
 

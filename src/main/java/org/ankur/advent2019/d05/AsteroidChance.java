@@ -6,12 +6,12 @@ import java.util.Arrays;
 
 public class AsteroidChance {
 
-    public int alarm(String inputFile, int input) {
+    public int code(String inputFile, int input) {
         String s = FileReader.readFileAsString(inputFile);
-        return alarmString(s, input);
+        return run(s, input);
     }
 
-    int alarmString(String inputStr, int input) {
+    int run(String inputStr, int input) {
         String[] split = inputStr.split(",");
         int[] array = Arrays.stream(split).mapToInt(Integer::parseInt).toArray();
         return opCode(array, input);

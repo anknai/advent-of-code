@@ -2,7 +2,9 @@ package org.ankur.advent2019.d11;
 
 import org.ankur.advent.util.FileReader;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SpacePolice {
 
@@ -12,20 +14,20 @@ public class SpacePolice {
     private Map<Integer, Panel> indexMap;
     int max = 160;
 
-    public long alarm(String inputFile) {
+    public long count(String inputFile) {
         index = 0;
         relativeBase = 0;
         indexMap = new HashMap<>();
         String s = FileReader.readFileAsString(inputFile);
-        return alarmString(s, 0);
+        return run(s, 0);
     }
 
-    public void alarm2(String inputFile) {
+    public void registration(String inputFile) {
         indexMap = new HashMap<>();
         index = 0;
         relativeBase = 0;
         String s = FileReader.readFileAsString(inputFile);
-        alarmString(s, 1);
+        run(s, 1);
         char[][] map = new char[max][max];
         for (int y = 0; y < max; y++) {
             for (int x = 0; x < max; x++) {
@@ -50,7 +52,7 @@ public class SpacePolice {
         }
     }
 
-    long alarmString(String inputStr, long input) {
+    long run(String inputStr, long input) {
         String[] split = inputStr.split(",");
         long[] array = Arrays.stream(split).mapToLong(Long::parseLong).toArray();
         long[] copy = new long[array.length + 1000000];

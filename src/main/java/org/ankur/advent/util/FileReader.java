@@ -39,7 +39,7 @@ public class FileReader {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        throw new RuntimeException();
     }
 
     public static List<TreeSet<Integer>> readFileAsListOfIntegerSets(String fileName) {

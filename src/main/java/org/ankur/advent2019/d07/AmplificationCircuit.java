@@ -2,7 +2,11 @@ package org.ankur.advent2019.d07;
 
 import org.ankur.advent.util.FileReader;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class AmplificationCircuit {
 
@@ -10,15 +14,15 @@ public class AmplificationCircuit {
 
     private int[] ips = new int[5];
 
-    int alarm(String file) {
-        return alarmString(FileReader.readFileAsString(file));
+    int highest(String file) {
+        return run(FileReader.readFileAsString(file));
     }
 
-    int alarm2(String file) {
-        return alarmString2(FileReader.readFileAsString(file));
+    int feedbackHighest(String file) {
+        return feedbackHighestString(FileReader.readFileAsString(file));
     }
 
-    int alarmString(String inputStr) {
+    int run(String inputStr) {
         String[] split = inputStr.split(",");
         List<String> combi = initialize(1234, 43210);
         int max = Integer.MIN_VALUE;
@@ -43,7 +47,7 @@ public class AmplificationCircuit {
         return max;
     }
 
-    int alarmString2(String inputStr) {
+    int feedbackHighestString(String inputStr) {
         String[] split = inputStr.split(",");
         List<String> combi = initialize(56789, 98765);
         int max = Integer.MIN_VALUE;

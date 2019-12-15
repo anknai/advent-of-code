@@ -2,7 +2,9 @@ package org.ankur.advent2019.d13;
 
 import org.ankur.advent.util.FileReader;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CarePackage {
 
@@ -11,21 +13,21 @@ public class CarePackage {
     private int relativeBase = 0;
     private boolean halt;
 
-    public long alarm(String inputFile) {
+    public long blockTiles(String inputFile) {
         index = 0;
         relativeBase = 0;
         String s = FileReader.readFileAsString(inputFile);
-        return alarmString(s, 0);
+        return run(s, 0);
     }
 
-    public long alarm2(String inputFile) {
+    public long score(String inputFile) {
         index = 0;
         relativeBase = 0;
         String s = FileReader.readFileAsString(inputFile);
-        return alarmString2(s, 2);
+        return run2(s, 2);
     }
 
-    long alarmString2(String inputStr, long input) {
+    long run2(String inputStr, long input) {
         String[] split = inputStr.split(",");
         long[] array = Arrays.stream(split).mapToLong(Long::parseLong).toArray();
         long[] copy = new long[array.length + 1000000];
@@ -76,7 +78,7 @@ public class CarePackage {
         return score;
     }
 
-    long alarmString(String inputStr, long input) {
+    long run(String inputStr, long input) {
         String[] split = inputStr.split(",");
         long[] array = Arrays.stream(split).mapToLong(Long::parseLong).toArray();
         long[] copy = new long[array.length + 1000000];
