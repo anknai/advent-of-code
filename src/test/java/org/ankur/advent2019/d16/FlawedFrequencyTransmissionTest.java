@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class Day16Test extends Day16 {
+public class FlawedFrequencyTransmissionTest extends FlawedFrequencyTransmission {
 
     private final static String INPUT = "2019_16.txt";
 

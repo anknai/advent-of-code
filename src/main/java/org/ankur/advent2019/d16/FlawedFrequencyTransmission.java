@@ -2,7 +2,7 @@ package org.ankur.advent2019.d16;
 
 import org.ankur.advent.util.FileReader;
 
-public class Day16 {
+public class FlawedFrequencyTransmission {
 
     public String part1(String fileName, int phases) {
         String strings = FileReader.readFileAsString(fileName);
