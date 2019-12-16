@@ -20,8 +20,8 @@ public class Day16Test extends Day16 {
     @Test
     public void testPart2() {
         assertEquals("84462026", super.init2("03036732577212944063491565474664", 100));
-        //assertEquals("78725270", super.init2("02935109699940807407585447034323", 100));
-        //assertEquals("53553731", super.init2("03081770884921959731165446850517", 100));
-        //assertEquals("120", super.part2(INPUT, 100));
+        assertEquals("78725270", super.init2("02935109699940807407585447034323", 100));
+        assertEquals("53553731", super.init2("03081770884921959731165446850517", 100));
+        assertEquals("13270205", super.part2(INPUT, 100));
     }
 }

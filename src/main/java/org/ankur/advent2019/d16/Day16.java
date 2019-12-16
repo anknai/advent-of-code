@@ -28,13 +28,8 @@ public class Day16 {
             ints[i] = charArray[i] - 48;
         }
         for (int phase = 0; phase < phases; phase++) {
-            for (int repeat = 0; repeat < length; repeat++) {
-                int[] pattern = pattern(repeat, length);
-                int number = 0;
-                for (int i = repeat; i < length; i++) {
-                    int in = ints[i];
-                    number += (in * pattern[i + 1]);
-                }
+            for (int repeat = length - 2; repeat > length / 2; repeat--) {
+                int number = ints[repeat + 1] + ints[repeat];
                 ints[repeat] = Math.abs(number % 10);
             }
         }
@@ -88,9 +83,7 @@ public class Day16 {
             } else {
                 pattern[i1] = -1;
             }
-            //System.out.print(pattern[i1] + ", ");
         }
-        //System.out.println();
         return pattern;
     }
 }
