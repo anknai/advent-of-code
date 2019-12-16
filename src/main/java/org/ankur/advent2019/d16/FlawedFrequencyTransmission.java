@@ -21,20 +21,20 @@ public class FlawedFrequencyTransmission {
         }
         strings = stringBuilder.toString();
         char[] charArray = strings.toCharArray();
-        String offset = strings.substring(0, 7);
+        int off = Integer.parseInt(strings.substring(0, 7));
         int length = strings.length();
         int[] ints = new int[length];
         for (int i = 0; i < length; i++) {
             ints[i] = charArray[i] - 48;
         }
         for (int phase = 0; phase < phases; phase++) {
-            for (int repeat = length - 2; repeat > length / 2; repeat--) {
+            for (int repeat = length - 2; repeat > off - 5; repeat--) {
                 int number = ints[repeat + 1] + ints[repeat];
                 ints[repeat] = Math.abs(number % 10);
             }
         }
         StringBuilder str = new StringBuilder();
-        int off = Integer.parseInt(offset);
+
         for (int i = off; i < off + 8; i++) {
             System.out.print(ints[i]);
             str.append(ints[i]);
@@ -59,9 +59,7 @@ public class FlawedFrequencyTransmission {
                     number += (in * pattern[i + 1]);
                 }
                 ints[repeat] = Math.abs(number % 10);
-                //System.out.print(ints[repeat] + ", ");
             }
-            //System.out.println();
         }
         StringBuilder str = new StringBuilder();
         for (int i = 0; i < 8; i++) {
