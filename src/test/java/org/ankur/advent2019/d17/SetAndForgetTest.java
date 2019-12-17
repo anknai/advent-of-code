@@ -4,13 +4,13 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class Day17Test extends Day17 {
+public class SetAndForgetTest extends SetAndForget {
 
     private final static String INPUT = "2019_17.txt";
 
     @Test
     public void testPart1() {
-        assertEquals(80, super.part1(INPUT));
+        assertEquals(7328, super.part1(INPUT));
     }
 
     @Test
