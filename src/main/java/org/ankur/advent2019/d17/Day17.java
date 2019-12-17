@@ -58,38 +58,41 @@ public class Day17 {
     }
 
     private long init2(String inputStr) {
+        index = 0;
+        relativeBase = 0;
         //L10,R8,R6,R10,L12,R8,L12,L10,R8,R6,R10,L12,R8,L12,L10,R8,R6,R10,L8,L8,R12,R8,L12,L10,R8,R6,R10,L10,L8,L8,R10,R8,R6,R10
         String routine = "A,B,A,B,C,C,B,A,C,A\n";
-        char[] as = {76, 44, 58, 44, 82, 44, 56, 44, 82, 44, 54, 44, 82, 44, 58, 44, 10};
+        //char[] as = {76, 44, 58, 44, 82, 44, 56, 44, 82, 44, 54, 44, 82, 44, 58, 44, 10};
         String a = "L,10,R,8,R,6,R,10\n";
-        char[] bs = {76, 44, 60, 44, 82, 44, 56, 44, 76, 44, 60, 10};
+        //char[] bs = {76, 44, 60, 44, 82, 44, 56, 44, 76, 44, 60, 10};
         String b = "L,12,R,8,L,12\n";
-        char[] cs = {76, 44, 58, 44, 82, 44, 56, 44, 82, 44, 56, 10};
+        //char[] cs = {76, 44, 58, 44, 82, 44, 56, 44, 82, 44, 56, 10};
         String c = "L,10,R,8,R,8\n";
         String[] split = inputStr.split(",");
         long[] array = Arrays.stream(split).mapToLong(Long::parseLong).toArray();
         long[] copy = new long[array.length + 100000000];
         System.arraycopy(array, 0, copy, 0, array.length);
         copy[0] = 2;
-        long input = 0;
+        long input;
         for (char c1 : routine.toCharArray()) {
-            input = opCode(copy, c1);
+            opCode(copy, c1);
         }
-        for (char c1 : as) {
-            input = opCode(copy, c1);
+        for (char c1 : a.toCharArray()) {
+            opCode(copy, c1);
         }
-        for (char c1 : bs) {
-            input = opCode(copy, c1);
+        for (char c1 : b.toCharArray()) {
+            opCode(copy, c1);
         }
-        for (char c1 : cs) {
-            input = opCode(copy, c1);
+        for (char c1 : c.toCharArray()) {
+            opCode(copy, c1);
         }
-        input = opCode(copy, 'y');
+        opCode(copy, 'y');
         input = opCode(copy, '\n');
         return input;
     }
 
     private long opCode(long[] array, long input) {
+        System.out.print(input + " ");
         if (array[index] == 99) {
             return -1;
         }
