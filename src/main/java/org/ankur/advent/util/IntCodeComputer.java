@@ -33,8 +33,23 @@ public class IntCodeComputer {
         inputs = new LinkedList<>();
     }
 
-    public void addInput(Long input) {
+    public IntCodeComputer(String input, boolean basic) {
+        String[] split = input.split(",");
+        long[] array = Arrays.stream(split).mapToLong(Long::parseLong).toArray();
+        copy = new long[array.length];
+        System.arraycopy(array, 0, copy, 0, array.length);
+        instructions = new long[copy.length];
+        System.arraycopy(copy, 0, instructions, 0, copy.length);
+        outputs = new LinkedList<>();
+        inputs = new LinkedList<>();
+    }
+
+    public void addInput(long input) {
         inputs.add(input);
+    }
+
+    public void addInput(int input) {
+        inputs.add((long)input);
     }
 
     public void update(int index, long value) {
@@ -70,8 +85,8 @@ public class IntCodeComputer {
         return output;
     }
 
-    public Queue<Long> outputs() {
-        return outputs;
+    public boolean hasOutput() {
+        return outputs.size() > 0;
     }
 
     public void run() {
@@ -126,6 +141,7 @@ public class IntCodeComputer {
             if (opcode == 3) {
                 Long poll = inputs.poll();
                 if (poll == null) {
+                    System.err.println("Needs input");
                     needsInput = true;
                     return;
                 }

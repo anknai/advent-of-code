@@ -19,7 +19,7 @@ public class SetAndForget {
         String s = FileReader.readFileAsString(fileName);
         init2(s);
         long max = Long.MIN_VALUE;
-        while (computer.outputs().size() > 0) {
+        while (computer.hasOutput()) {
             max = Math.max(computer.output(), max);
         }
         return max;

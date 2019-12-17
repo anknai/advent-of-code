@@ -27,7 +27,7 @@ public class CarePackage {
         computer.update(0, 2);
         while (computer.running()) {
             computer.run();
-            while (computer.outputs().size() > 0) {
+            while (computer.hasOutput()) {
                 long x = computer.output();
                 long y = computer.output();
                 long z = computer.output();
