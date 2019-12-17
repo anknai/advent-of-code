@@ -2,7 +2,7 @@ package org.ankur.advent2019.d17;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class Day17Test extends Day17 {
 
@@ -15,6 +15,6 @@ public class Day17Test extends Day17 {
 
     @Test
     public void testPart2() {
-        assertEquals(80, super.part2(INPUT));
+        assertEquals(1289413, super.part2(INPUT));
     }
 }
