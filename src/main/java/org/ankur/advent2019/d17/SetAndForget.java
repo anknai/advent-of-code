@@ -4,15 +4,11 @@ import org.ankur.advent.util.FileReader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class SetAndForget {
-
-    private int index = 0;
-    private int relativeBase = 0;
-    private boolean halt = false;
-    private int j = 0;
-    private long output;
 
     public int part1(String fileName) {
         String s = FileReader.readFileAsString(fileName);
@@ -38,7 +34,7 @@ public class SetAndForget {
         boolean more = true;
         long previous = 0L;
         while (more) {
-            opCode(copy, new int[]{0});
+            opCode(copy, new LinkedList<>());
             if (output == 10) {
                 builder = new StringBuilder();
                 stringBuilders.add(builder);
@@ -100,7 +96,7 @@ public class SetAndForget {
     private void init2(String inputStr) {
         index = 0;
         relativeBase = 0;
-        int[] inputs = new int[100];
+        Queue<Long> inputs = new LinkedList<>();
         //L10,R8,R6,R10,L12,R8,L12,L10,R8,R6,R10,L12,R8,L12,L10,R8,R6,R10,L8,L8,R12,R8,L12,L10,R8,R6,R10,L10,L8,L8,R10,R8,R6,R10
         String routine = "A,B,A,B,C,C,B,A,C,A\n";
         String a = "L,10,R,8,R,6,R,10\n";
@@ -113,26 +109,30 @@ public class SetAndForget {
         copy[0] = 2;
         int i = 0;
         for (char c1 : routine.toCharArray()) {
-            inputs[i++] = c1;
+            inputs.add((long)c1);
         }
         for (char c1 : a.toCharArray()) {
-            inputs[i++] = c1;
+            inputs.add((long)c1);
         }
         for (char c1 : b.toCharArray()) {
-            inputs[i++] = c1;
+            inputs.add((long)c1);
         }
         for (char c1 : c.toCharArray()) {
-            inputs[i++] = c1;
+            inputs.add((long)c1);
         }
-        inputs[i++] = 'y';
-        inputs[i] = '\n';
+        inputs.add((long)'y');
+        inputs.add((long)'\n');
         halt = false;
         while (!halt) {
             opCode(copy, inputs);
         }
     }
 
-    private void opCode(long[] array, int[] inputs) {
+    private int index = 0;
+    private int relativeBase = 0;
+    private boolean halt = false;
+    private long output;
+    private void opCode(long[] array, Queue<Long> inputs) {
         if (array[index] == 99) {
             halt = true;
             return;
@@ -181,8 +181,14 @@ public class SetAndForget {
             }
 
             if (opcode == 3) {
-                value = inputs[j++];
+                Long poll = inputs.poll();
+                if (poll == null) {
+                    System.out.println("No more inputs");
+                    return;
+                }
+                value = poll;
                 mode = mode1;
+
             } else if (opcode == 4) {
                 output = parameter(mode1, array, ++index, relativeBase);
                 index++;
