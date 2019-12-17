@@ -20,7 +20,13 @@ public class SetAndForget {
     public long part2(String fileName) {
         String s = FileReader.readFileAsString(fileName);
         init2(s);
-        return computer.getOutput();
+        long output = 0L;
+        long max = Long.MIN_VALUE;
+        while (output != -1) {
+            output = computer.output();
+            max = Math.max(output, max);
+        }
+        return max;
     }
 
     private int init(String inputStr) {
@@ -33,8 +39,8 @@ public class SetAndForget {
         long previous = 0L;
         while (more) {
             computer.run(new LinkedList<>());
-            long output = computer.getOutput();
-            if (computer.getOutput() == 10) {
+            long output = computer.output();
+            if (output == 10) {
                 builder = new StringBuilder();
                 stringBuilders.add(builder);
                 line++;

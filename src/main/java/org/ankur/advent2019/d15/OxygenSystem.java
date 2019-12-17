@@ -83,7 +83,7 @@ public class OxygenSystem {
         while (computer.running() && count < 10000) {
             count++;
             computer.run(inputs);
-            int status = (int) computer.getOutput();
+            int status = (int) computer.output();
             int newX = x;
             int newY = y;
             switch (direction) {

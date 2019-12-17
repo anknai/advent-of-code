@@ -1,6 +1,7 @@
 package org.ankur.advent.util;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Queue;
 
 public class IntCodeComputer {
@@ -11,11 +12,13 @@ public class IntCodeComputer {
 
     private boolean halt = false;
 
-    private long output;
+    private Queue<Long> outputs;
 
     private long[] copy;
 
     private long[] instructions;
+
+    private boolean needsInput;
 
     public IntCodeComputer(String input) {
         String[] split = input.split(",");
@@ -24,6 +27,7 @@ public class IntCodeComputer {
         System.arraycopy(array, 0, copy, 0, array.length);
         instructions = new long[copy.length];
         System.arraycopy(copy, 0, instructions, 0, copy.length);
+        outputs = new LinkedList<>();
     }
 
     public void update(int index, long value) {
@@ -36,19 +40,35 @@ public class IntCodeComputer {
         relativeBase = 0;
         halt = false;
         instructions = new long[copy.length];
+        needsInput = false;
         System.arraycopy(copy, 0, instructions, 0, copy.length);
+        outputs = new LinkedList<>();
+    }
+
+    public boolean needsInput() {
+        return needsInput;
     }
 
     public boolean running() {
         return !halt;
     }
 
-    public long getOutput() {
+    public long output() {
+        Long output = outputs.poll();
+        if (null == output) {
+            System.err.println("No output to poll");
+            return -1;
+        }
         return output;
+    }
+
+    public Queue<Long> outputs() {
+        return outputs;
     }
 
     public void run(Queue<Long> inputs) {
         if (instructions[index] == 99) {
+            System.err.println("halting");
             halt = true;
             return;
         }
@@ -56,9 +76,9 @@ public class IntCodeComputer {
             long opcodeStr = instructions[index];
             long opcode = opcodeStr % 100;
             if (opcode == 99) {
-                System.out.println("Breaking up now");
+                System.err.println("halting");
                 halt = true;
-                break;
+                return;
             }
             int modes = (int) opcodeStr / 100;
             int mode1 = modes % 10;
@@ -98,22 +118,18 @@ public class IntCodeComputer {
             if (opcode == 3) {
                 Long poll = inputs.poll();
                 if (poll == null) {
-                    System.err.println("No more inputs");
+                    needsInput = true;
                     return;
                 }
-                System.out.println("Input " + poll);
                 value = poll;
                 mode = mode1;
-
             } else if (opcode == 4) {
-                output = parameter(mode1, instructions, ++index, relativeBase);
-                index++;
-                return;
+                outputs.add(parameter(mode1, instructions, ++index, relativeBase));
             } else if (opcode == 9) {
                 relativeBase += parameter(mode1, instructions, ++index, relativeBase);
             }
 
-            if (opcode != 5 && opcode != 6 && opcode != 9) {
+            if (opcode != 4 && opcode != 5 && opcode != 6 && opcode != 9) {
                 int valuePointer = (int) instructions[++index];
                 if (mode == 2) {
                     valuePointer += relativeBase;
