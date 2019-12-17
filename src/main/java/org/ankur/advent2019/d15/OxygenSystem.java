@@ -8,7 +8,6 @@ import org.ankur.advent2018.domain.Point;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.TreeMap;
 
 import static org.ankur.advent2018.domain.Point.AreaType.OXYGEN;
@@ -76,13 +75,12 @@ public class OxygenSystem {
         x = maxX / 2;
         y = maxY / 2;
         system[x][y] = 'D';
-        Queue<Long> inputs = new LinkedList<>();
-        inputs.add(1L);
+        computer.addInput(1L);
         int direction = 1;
         int count = 0;
         while (computer.running() && count < 10000) {
             count++;
-            computer.run(inputs);
+            computer.run();
             int status = (int) computer.output();
             int newX = x;
             int newY = y;
@@ -119,7 +117,7 @@ public class OxygenSystem {
                 break;
             }
             direction = changeDirection();
-            inputs.add((long)direction);
+            computer.addInput((long)direction);
         }
         System.out.println("count " + count);
         return calculate();

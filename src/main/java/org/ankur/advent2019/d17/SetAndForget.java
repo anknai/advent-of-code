@@ -4,9 +4,7 @@ import org.ankur.advent.util.FileReader;
 import org.ankur.advent.util.IntCodeComputer;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 public class SetAndForget {
 
@@ -20,11 +18,9 @@ public class SetAndForget {
     public long part2(String fileName) {
         String s = FileReader.readFileAsString(fileName);
         init2(s);
-        long output = 0L;
         long max = Long.MIN_VALUE;
-        while (output != -1) {
-            output = computer.output();
-            max = Math.max(output, max);
+        while (computer.outputs().size() > 0) {
+            max = Math.max(computer.output(), max);
         }
         return max;
     }
@@ -38,7 +34,7 @@ public class SetAndForget {
         boolean more = true;
         long previous = 0L;
         while (more) {
-            computer.run(new LinkedList<>());
+            computer.run();
             long output = computer.output();
             if (output == 10) {
                 builder = new StringBuilder();
@@ -99,7 +95,6 @@ public class SetAndForget {
     }
 
     private void init2(String inputStr) {
-        Queue<Long> inputs = new LinkedList<>();
         //L10,R8,R6,R10,L12,R8,L12,L10,R8,R6,R10,L12,R8,L12,L10,R8,R6,R10,L8,L8,R12,R8,L12,L10,R8,R6,R10,L10,L8,L8,R10,R8,R6,R10
         String routine = "A,B,A,B,C,C,B,A,C,A\n";
         String a = "L,10,R,8,R,6,R,10\n";
@@ -108,21 +103,19 @@ public class SetAndForget {
         computer = new IntCodeComputer(inputStr);
         computer.update(0, 2);
         for (char c1 : routine.toCharArray()) {
-            inputs.add((long)c1);
+            computer.addInput((long)c1);
         }
         for (char c1 : a.toCharArray()) {
-            inputs.add((long)c1);
+            computer.addInput((long)c1);
         }
         for (char c1 : b.toCharArray()) {
-            inputs.add((long)c1);
+            computer.addInput((long)c1);
         }
         for (char c1 : c.toCharArray()) {
-            inputs.add((long)c1);
+            computer.addInput((long)c1);
         }
-        inputs.add((long)'y');
-        inputs.add((long)'\n');
-        while (computer.running()) {
-            computer.run(inputs);
-        }
+        computer.addInput((long)'y');
+        computer.addInput((long)'\n');
+        computer.run();
     }
 }

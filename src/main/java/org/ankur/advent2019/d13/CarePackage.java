@@ -4,8 +4,6 @@ import org.ankur.advent.util.FileReader;
 import org.ankur.advent.util.IntCodeComputer;
 
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Set;
 
 public class CarePackage {
@@ -27,9 +25,8 @@ public class CarePackage {
         Item paddle = null;
         long score = 0;
         computer.update(0, 2);
-        Queue<Long> inputs = new LinkedList<>();
         while (computer.running()) {
-            computer.run(inputs);
+            computer.run();
             while (computer.outputs().size() > 0) {
                 long x = computer.output();
                 long y = computer.output();
@@ -56,7 +53,7 @@ public class CarePackage {
                 }
             }
             if (null != paddle && null != ball) {
-                inputs.add((long)Long.compare(ball.getX(), paddle.getX()));
+                computer.addInput((long)Long.compare(ball.getX(), paddle.getX()));
             }
         }
         return score;
@@ -65,8 +62,7 @@ public class CarePackage {
     long run(String inputStr) {
         IntCodeComputer computer = new IntCodeComputer(inputStr);
         int count = 0;
-        Queue<Long> inputs = new LinkedList<>();
-        computer.run(inputs);
+        computer.run();
         long output = 0;
         //inputs.add((long) 0);
         while (output != -1) {

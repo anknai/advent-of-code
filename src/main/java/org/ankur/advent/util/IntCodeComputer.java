@@ -12,6 +12,8 @@ public class IntCodeComputer {
 
     private boolean halt = false;
 
+    private Queue<Long> inputs;
+
     private Queue<Long> outputs;
 
     private long[] copy;
@@ -28,6 +30,11 @@ public class IntCodeComputer {
         instructions = new long[copy.length];
         System.arraycopy(copy, 0, instructions, 0, copy.length);
         outputs = new LinkedList<>();
+        inputs = new LinkedList<>();
+    }
+
+    public void addInput(Long input) {
+        inputs.add(input);
     }
 
     public void update(int index, long value) {
@@ -43,6 +50,7 @@ public class IntCodeComputer {
         needsInput = false;
         System.arraycopy(copy, 0, instructions, 0, copy.length);
         outputs = new LinkedList<>();
+        inputs = new LinkedList<>();
     }
 
     public boolean needsInput() {
@@ -66,7 +74,7 @@ public class IntCodeComputer {
         return outputs;
     }
 
-    public void run(Queue<Long> inputs) {
+    public void run() {
         if (instructions[index] == 99) {
             System.err.println("halting");
             halt = true;

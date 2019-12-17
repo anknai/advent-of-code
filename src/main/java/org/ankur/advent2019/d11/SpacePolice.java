@@ -1,22 +1,17 @@
 package org.ankur.advent2019.d11;
 
 import org.ankur.advent.util.FileReader;
+import org.ankur.advent.util.IntCodeComputer;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SpacePolice {
 
-    private int index = 0;
-
-    private int relativeBase = 0;
     private Map<Integer, Panel> indexMap;
-    int max = 160;
+    private int max = 160;
 
     public long count(String inputFile) {
-        index = 0;
-        relativeBase = 0;
         indexMap = new HashMap<>();
         String s = FileReader.readFileAsString(inputFile);
         return run(s, 0);
@@ -24,8 +19,6 @@ public class SpacePolice {
 
     public void registration(String inputFile) {
         indexMap = new HashMap<>();
-        index = 0;
-        relativeBase = 0;
         String s = FileReader.readFileAsString(inputFile);
         run(s, 1);
         char[][] map = new char[max][max];
@@ -40,7 +33,7 @@ public class SpacePolice {
             int y = integer % 1000;
             //System.out.println(integer);
             if (integerPanelEntry.getValue().getColor() == 1) {
-                map[x][y] = '#';
+                map[x][y] = '\u2588';
             }
         }
 
@@ -53,10 +46,7 @@ public class SpacePolice {
     }
 
     long run(String inputStr, long input) {
-        String[] split = inputStr.split(",");
-        long[] array = Arrays.stream(split).mapToLong(Long::parseLong).toArray();
-        long[] copy = new long[array.length + 1000000];
-        System.arraycopy(array, 0, copy, 0, array.length);
+        IntCodeComputer computer = new IntCodeComputer(inputStr);
 
         int x = max/2;
         int y = max/2;
@@ -65,21 +55,15 @@ public class SpacePolice {
         indexMap.put(x * 1000 + y, panel);
         //direction UP, LEFT, RIGHT, DOWN
         char direction = '^';
-        while(input != -1) {
+        while(computer.running()) {
+            computer.addInput((long)panel.getColor());
+            computer.run();
+            long output = computer.output();
             //System.out.println("Working on panel " + panel + " direction " + direction + " index " + index + " " + copy[index]);
-            input = opCode(copy, panel.getColor());
-            if (input == -1) {
-                System.out.println("Ending");
-                return indexMap.size();
-            }
-            panel.setColor((int)input);
-            input = opCode(copy, input);
-            if (input == -1) {
-                System.out.println("Ending");
-                return indexMap.size();
-            }
+            panel.setColor((int)output);
+            output = computer.output();
             //direction
-            if (input == 0) {
+            if (output == 0) {
                 switch (direction) {
                     case '^':
                         direction = '<';
@@ -98,7 +82,7 @@ public class SpacePolice {
                         y--;
                         break;
                 }
-            } else if (input == 1) {
+            } else if (output == 1) {
                 switch (direction) {
                     case '^':
                         direction = '>';
@@ -128,104 +112,5 @@ public class SpacePolice {
             }
         }
         return indexMap.size();
-    }
-
-    private long opCode(long[] array, long input) {
-         //int index = 0;
-
-         //int relativeBase = 0;
-        if (array[index] == 99) {
-            return -1;
-        }
-        while (array[index] != 99) {
-            long opcodeStr = array[index];
-            long opcode = opcodeStr % 100;
-            if (opcode == 99) {
-                System.out.println("Breaking up now");
-                return -1L;
-            }
-            int modes = (int) opcodeStr / 100;
-            int mode1 = modes % 10;
-            int mode2 = (modes / 10) % 10;
-            int mode = (modes / 100 );
-            long value = 0;
-
-            if (opcode == 1 || opcode == 2 || opcode == 5 || opcode == 6 || opcode == 7 || opcode == 8) {
-                long firstValue = parameter(mode1, array, ++index, relativeBase);
-                long secondValue = parameter(mode2, array, ++index, relativeBase);
-
-                if (opcode == 1) {
-                    value = firstValue + secondValue;
-                } else if (opcode == 2) {
-                    value = firstValue * secondValue;
-                } else if (opcode == 5) {
-                    if (firstValue != 0) {
-                        index = (int) secondValue;
-                        continue;
-                    }
-                } else if (opcode == 6) {
-                    if (firstValue == 0) {
-                        index = (int) secondValue;
-                        continue;
-                    }
-                } else if (opcode == 7) {
-                    if (firstValue < secondValue) {
-                        value = 1;
-                    }
-                } else {
-                    if (firstValue == secondValue) {
-                        value = 1;
-                    }
-                }
-            }
-
-            if (opcode == 3) {
-                mode = mode1;
-                value = input;
-            } else if (opcode == 4) {
-                input = parameter(mode1, array, ++index, relativeBase);
-                ++index;
-                return input;
-            } else if (opcode == 9) {
-                relativeBase += parameter(mode1, array, ++index, relativeBase);;
-            }
-
-            if (opcode != 5 && opcode != 6 && opcode != 9) {
-                int valuePointer = (int) array[++index];
-                if (mode == 2) {
-                    valuePointer += relativeBase;
-                }
-                assert valuePointer < array.length;
-                assert valuePointer >= 0;
-
-                array[valuePointer] = value;
-            }
-
-            if (opcode < 1 || opcode > 9) {
-                System.out.println("Something went wrong, unexpected opcode " + opcode + " at position " + index);
-            }
-
-            index++;
-        }
-
-        return input;
-    }
-
-    private long parameter(int mode, long[] array, int index, int relativeBase) {
-        int pointer;
-        long value;
-        if (mode == 0) {
-            pointer = (int) array[index];
-            assert pointer < array.length;
-            value = array[pointer];
-        } else if (mode == 1) {
-            value = array[index];
-        } else {
-            pointer = (int) array[index] + relativeBase;
-            assert pointer < array.length;
-            assert pointer >= 0;
-            value = array[pointer];
-        }
-        return value;
     }
 }
