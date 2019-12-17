@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.TreeMap;
 
 import static org.ankur.advent2018.domain.Point.AreaType.OXYGEN;
@@ -15,12 +16,6 @@ import static org.ankur.advent2018.domain.Point.AreaType.ROOM;
 import static org.ankur.advent2018.domain.Point.AreaType.WALL;
 
 public class OxygenSystem {
-
-    private int index = 0;
-
-    private int relativeBase = 0;
-
-    private boolean halt;
 
     private char[][] system;
 
@@ -88,12 +83,15 @@ public class OxygenSystem {
         x = maxX / 2;
         y = maxY / 2;
         system[x][y] = 'D';
+        Queue<Long> inputs = new LinkedList<>();
+        inputs.add(1L);
         int direction = 1;
         halt = false;
         int count = 0;
         while (!halt && count < 10000) {
             count++;
-            int status = (int) opCode(copy, direction);
+            opCode(copy, inputs);
+            int status = (int) output;
             int newX = x;
             int newY = y;
             switch (direction) {
@@ -129,6 +127,7 @@ public class OxygenSystem {
                 break;
             }
             direction = changeDirection();
+            inputs.add((long)direction);
         }
         System.out.println("count " + count);
         return calculate();
@@ -242,19 +241,22 @@ public class OxygenSystem {
         }
     }
 
-    private long opCode(long[] array, long input) {
+    private int index = 0;
+    private int relativeBase = 0;
+    private boolean halt = false;
+    private long output;
+    private void opCode(long[] array, Queue<Long> inputs) {
         if (array[index] == 99) {
-            System.out.println("Halting");
             halt = true;
-            return -1L;
+            return;
         }
         while (array[index] != 99) {
             long opcodeStr = array[index];
             long opcode = opcodeStr % 100;
             if (opcode == 99) {
-                halt = true;
                 System.out.println("Breaking up now");
-                return -1;
+                halt = true;
+                break;
             }
             int modes = (int) opcodeStr / 100;
             int mode1 = modes % 10;
@@ -292,14 +294,20 @@ public class OxygenSystem {
             }
 
             if (opcode == 3) {
+                Long poll = inputs.poll();
+                if (poll == null) {
+                    System.out.println("No more inputs");
+                    return;
+                }
+                value = poll;
                 mode = mode1;
-                value = input;
+
             } else if (opcode == 4) {
-                input = parameter(mode1, array, ++index, relativeBase);
-                ++index;
-                return input;
+                output = parameter(mode1, array, ++index, relativeBase);
+                index++;
+                return;
             } else if (opcode == 9) {
-                relativeBase += parameter(mode1, array, ++index, relativeBase);;
+                relativeBase += parameter(mode1, array, ++index, relativeBase);
             }
 
             if (opcode != 5 && opcode != 6 && opcode != 9) {
@@ -319,8 +327,6 @@ public class OxygenSystem {
 
             index++;
         }
-
-        return input;
     }
 
     private long parameter(int mode, long[] array, int index, int relativeBase) {
