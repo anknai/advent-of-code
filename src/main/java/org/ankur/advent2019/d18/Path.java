@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 public class Path {
 
-    private Vault key;
+    private Character key;
 
     private int distance;
 }

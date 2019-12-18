@@ -6,11 +6,17 @@ import org.ankur.advent2018.domain.Point;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import static org.ankur.advent2018.domain.Point.AreaType.KEY;
+import static org.ankur.advent2018.domain.Point.AreaType.ME;
+import static org.ankur.advent2018.domain.Point.AreaType.ROOM;
 
 public class Day18 {
 
@@ -22,11 +28,96 @@ public class Day18 {
 
     private List<List<Path>> allPaths;
 
-    private List<List<Character>> allTraversed;
+    private Map<Character, List<FullPath>> shortest;
 
     private int i = 0;
 
-    public int part1(String fileName) {
+    public int part(String fileName) {
+        shortest = new HashMap<>();
+        List<String> strings = FileReader.readFile(fileName);
+        init(strings);
+        print();
+        shortest();
+        allPaths = new ArrayList<>();
+        List<Path> path = new ArrayList<>();
+        List<Character> traversed = new ArrayList<>();
+        allPaths.add(path);
+        traverse(me.getAssortment(), traversed, path);
+        int minimum = Integer.MAX_VALUE;
+        List<Path> shortestPath = null;
+
+        for (List<Path> allPath : allPaths) {
+            Set<Character> characters = new HashSet<>(shortest.keySet());
+            characters.remove('@');
+            int distance = 0;
+            for (Path path1 : allPath) {
+                //System.out.print(path1.getKey() + "[" + path1.getDistance() + "], ");
+                characters.remove(path1.getKey());
+                distance += path1.getDistance();
+            }
+            if (characters.size() > 0) {
+                System.out.println("Incomplete" + Arrays.toString(characters.toArray()));
+                continue;
+            }
+            //System.out.println(distance);
+            if (distance < minimum) {
+                minimum = distance;
+                shortestPath = allPath;
+            }
+        }
+        if (null != shortestPath) {
+            for (Path path1 : shortestPath) {
+                System.out.print(path1.getKey() + ",");
+            }
+        }
+        return minimum;
+    }
+
+    private void traverse(Character from, List<Character> traversed, List<Path> paths) {
+        List<Path> local = new ArrayList<>();
+        //System.out.println("Traversing from " + from + " " + Arrays.toString(traversed.toArray()));
+        List<FullPath> fullPaths = shortest.get(from);
+        for (FullPath fullPath : fullPaths) {
+            if (traversed.contains(fullPath.getTo())) {
+                continue;
+            }
+            List<Character> path = new ArrayList<>(fullPath.getPath());
+            path.removeAll(traversed);
+            if (path.size() == 0) {
+                //System.out.println(fullPath.getTo() + " is " + fullPath.getDistance() + " from " + from);
+                local.add(new Path(fullPath.getTo(), fullPath.getDistance()));
+            }
+        }
+
+        if (local.size() == 0) {
+            //System.out.println("Nothing");
+            return;
+        }
+
+        Path current = local.get(0);
+        local.remove(0);
+
+        for (Path others : local) {
+            //System.out.println("Branching off to " + others + " " + Arrays.toString(traversed.toArray()));
+            List<Character> localTraversed = new ArrayList<>(traversed);
+            List<Path> localPath = new ArrayList<>(paths);
+            allPaths.add(localPath);
+            localPath.add(new Path(others.getKey(), others.getDistance()));
+            traversed(others.getKey(), localTraversed);
+            traverse(others.getKey(), localTraversed, localPath);
+        }
+
+        traversed(current.getKey(), traversed);
+        paths.add(new Path(current.getKey(), current.getDistance()));
+        traverse(current.getKey(), traversed, paths);
+    }
+
+    private void traversed(Character key, List<Character> traversed) {
+        traversed.add(key);
+        traversed.add((char)(key - 32));
+    }
+
+    /*public int part1(String fileName) {
         List<String> strings = FileReader.readFile(fileName);
         init(strings);
         print();
@@ -57,14 +148,14 @@ public class Day18 {
             }
         }
         return minimum;
-    }
+    }*/
 
     public int part2(String fileName) {
         FileReader.readFile(fileName);
         return 0;
     }
 
-    private void calculate(Vault from, List<Character> traversed, List<Path> paths) {
+    /*private void calculate(Vault from, List<Character> traversed, List<Path> paths) {
         //System.out.println(from + " " + Arrays.toString(traversed.toArray()));
         shortest(from, traversed);
         List<Path> local = new ArrayList<>();
@@ -113,7 +204,7 @@ public class Day18 {
                 //vaultMap[vault.getX()][vault.getY()] = '.';
             }
         }
-    }
+    }*/
 
     private void print() {
         for (int y = 0; y < vaultMap[0].length; y++) {
@@ -168,5 +259,53 @@ public class Day18 {
             }
         }
         Dijkstra.calculateShortestPathFromSource(from);
+    }
+
+    private void shortest() {
+        for (Vault vault : vaults) {
+            if (vault.getAreaType() == KEY || vault.getAreaType() == ME) {
+                List<FullPath> fullPaths = new ArrayList<>();
+               // System.out.println("================" + vault.getAssortment() + "===================");
+                shortest.put(vault.getAssortment(), fullPaths);
+                shortest(vault);
+                for (Vault other : vaults) {
+                    if (other == vault) {
+                        continue;
+                    }
+                    if (other.getAreaType() == KEY) {
+                        FullPath fullPath = new FullPath(other.getAssortment(), other.getDistance());
+                        fullPaths.add(fullPath);
+                        LinkedList<Point> path = other.getShortestPath();
+                        for (Point point : path) {
+                            if (point.getAreaType() != ROOM) {
+                                Vault v = (Vault) point;
+                                if (v.getAssortment() != vault.getAssortment() && v.getAssortment() != '@') {
+                                    fullPath.add(((Vault)point).getAssortment());
+                                }
+                            }
+                        }
+                        //System.out.println(fullPath);
+                    }
+                }
+            }
+        }
+    }
+
+    private void shortest(Vault me) {
+        for (Vault vault : vaults) {
+            vault.setDistance(Integer.MAX_VALUE);
+            vault.setAdjacentNodes(new TreeMap<>());
+            vault.setShortestPath(new LinkedList<>());
+        }
+        for (Vault vault : vaults) {
+            for (Vault other : vaults) {
+                if (other != vault) {
+                    if (vault.isAdjacent(other)) {
+                        vault.addDestination(other, 1);
+                    }
+                }
+            }
+        }
+        Dijkstra.calculateShortestPathFromSource(me);
     }
 }

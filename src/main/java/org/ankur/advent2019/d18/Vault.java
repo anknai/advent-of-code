@@ -4,6 +4,7 @@ import lombok.ToString;
 import org.ankur.advent2018.domain.Point;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 @ToString(callSuper = true)
