@@ -30,7 +30,7 @@ public class Day18 {
 
     private Map<Character, List<FullPath>> shortest;
 
-    private int i = 0;
+    int i = 0;
 
     public int part(String fileName) {
         shortest = new HashMap<>();
@@ -40,12 +40,11 @@ public class Day18 {
         shortest();
         allPaths = new ArrayList<>();
         List<Path> path = new ArrayList<>();
-        List<Character> traversed = new ArrayList<>();
         allPaths.add(path);
-        traverse(me.getAssortment(), traversed, path);
+        traverse(me.getAssortment(), path);
         int minimum = Integer.MAX_VALUE;
         List<Path> shortestPath = null;
-
+        i = 0;
         for (List<Path> allPath : allPaths) {
             Set<Character> characters = new HashSet<>(shortest.keySet());
             characters.remove('@');
@@ -73,7 +72,18 @@ public class Day18 {
         return minimum;
     }
 
-    private void traverse(Character from, List<Character> traversed, List<Path> paths) {
+    private void traverse(Character from, List<Path> paths) {
+        i++;
+        if (i % 10000 == 0) {
+            System.err.print(".");
+        }
+        if (i % 1000000 == 0) {
+            System.err.println(".");
+        }
+        List<Character> traversed = getTraversed(paths);
+        if (similar(paths, traversed)) {
+            return;
+        }
         List<Path> local = new ArrayList<>();
         //System.out.println("Traversing from " + from + " " + Arrays.toString(traversed.toArray()));
         List<FullPath> fullPaths = shortest.get(from);
@@ -99,22 +109,59 @@ public class Day18 {
 
         for (Path others : local) {
             //System.out.println("Branching off to " + others + " " + Arrays.toString(traversed.toArray()));
-            List<Character> localTraversed = new ArrayList<>(traversed);
             List<Path> localPath = new ArrayList<>(paths);
             allPaths.add(localPath);
             localPath.add(new Path(others.getKey(), others.getDistance()));
-            traversed(others.getKey(), localTraversed);
-            traverse(others.getKey(), localTraversed, localPath);
+            traverse(others.getKey(), localPath);
         }
 
-        traversed(current.getKey(), traversed);
         paths.add(new Path(current.getKey(), current.getDistance()));
-        traverse(current.getKey(), traversed, paths);
+        traverse(current.getKey(), paths);
     }
 
-    private void traversed(Character key, List<Character> traversed) {
-        traversed.add(key);
-        traversed.add((char)(key - 32));
+    private List<Character> getTraversed(List<Path> paths) {
+        List<Character> traversed = new ArrayList<>();
+        for (Path path : paths) {
+            traversed.add((char)(path.getKey() - 32));
+            traversed.add(path.getKey());
+        }
+        return traversed;
+    }
+
+    private boolean similar(List<Path> path, List<Character> traversed) {
+        int total = 0;
+        for (Path path1 : path) {
+            total += path1.getDistance();
+        }
+        if (total > 136) {
+            //System.out.println("too large");
+            return true;
+        }
+        for (List<Path> allPath : allPaths) {
+            if (allPath == path) {
+                continue;
+            }
+            if (allPath.size() != path.size()) {
+                continue;
+            }
+            if (path.get(path.size() - 1).getKey() != traversed.get(traversed.size() - 1)) {
+                continue;
+            }
+            int totalOther = 0;
+            List<Character> p = new ArrayList<>(traversed);
+            for (Path path1 : allPath) {
+                p.remove(path1.getKey());
+                p.remove(new Character((char)(path1.getKey() - 32)));
+                totalOther += path1.getDistance();
+            }
+            if (p.size() == 0) {
+                if (total >= totalOther) {
+                    //System.out.println("Shorter short path exists " + total + " " + totalOther + " " + Arrays.toString(traversed.toArray()));
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /*public int part1(String fileName) {
@@ -265,7 +312,7 @@ public class Day18 {
         for (Vault vault : vaults) {
             if (vault.getAreaType() == KEY || vault.getAreaType() == ME) {
                 List<FullPath> fullPaths = new ArrayList<>();
-               // System.out.println("================" + vault.getAssortment() + "===================");
+                //System.out.println("================" + vault.getAssortment() + "===================");
                 shortest.put(vault.getAssortment(), fullPaths);
                 shortest(vault);
                 for (Vault other : vaults) {

@@ -25,11 +25,7 @@ public class Vault extends Point {
         if (this.getAreaType() == AreaType.KEY && !traversed.contains(this.getAssortment())) {
             return false;
         }
-        if (Math.abs(other.getX() - this.getX()) == 1 && Math.abs(other.getY() - this.getY()) == 0) {
-            return true;
-        }
-
-        return Math.abs(other.getX() - this.getX()) == 0 && Math.abs(other.getY() - this.getY()) == 1;
+        return super.isAdjacent(other);
     }
 
     public char getAssortment() {
