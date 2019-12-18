@@ -10,8 +10,12 @@ public class Day18Test extends Day18 {
 
     @Test
     public void testPart1() {
-        assertEquals(8, super.part1("2019_18_01.txt"));
-        assertEquals(86, super.part1("2019_18_02.txt"));
+        //assertEquals(8, super.part1("2019_18_01.txt"));
+        //assertEquals(86, super.part1("2019_18_02.txt"));
+        //assertEquals(132, super.part1("2019_18_03.txt"));
+        //assertEquals(136, super.part1("2019_18_04.txt"));
+        //assertEquals(81, super.part1("2019_18_05.txt"));
+        assertEquals(136, super.part1(INPUT));
     }
 
     @Test

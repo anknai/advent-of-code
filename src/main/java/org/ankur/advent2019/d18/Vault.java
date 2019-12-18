@@ -3,6 +3,9 @@ package org.ankur.advent2019.d18;
 import lombok.ToString;
 import org.ankur.advent2018.domain.Point;
 
+import java.util.Arrays;
+import java.util.List;
+
 @ToString(callSuper = true)
 public class Vault extends Point {
 
@@ -13,8 +16,12 @@ public class Vault extends Point {
         this.assortment = assortment;
     }
 
-    public boolean isAdjacent(Vault other) {
-        if (other.getAreaType() == AreaType.DOOR) {
+    public boolean isAdjacent(Vault other, List<Character> traversed) {
+        if (other.getAreaType() == AreaType.DOOR && !traversed.contains(other.getAssortment())) {
+            //System.out.println(Arrays.toString(traversed.toArray()));
+            return false;
+        }
+        if (this.getAreaType() == AreaType.KEY && !traversed.contains(this.getAssortment())) {
             return false;
         }
         if (Math.abs(other.getX() - this.getX()) == 1 && Math.abs(other.getY() - this.getY()) == 0) {
@@ -29,8 +36,8 @@ public class Vault extends Point {
     }
 
     public void open() {
-        this.setAreaType(AreaType.ROOM);
-        this.assortment = '.';
+        this.setAreaType(AreaType.ME);
+        this.assortment = '@';
     }
 
     public void swap(Vault other) {
