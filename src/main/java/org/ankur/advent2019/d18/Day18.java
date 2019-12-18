@@ -21,7 +21,8 @@ public class Day18 {
         List<String> strings = FileReader.readFile(fileName);
         init(strings);
         print();
-        return calculate();
+        //me.open();
+        return calculate(me);
     }
 
     public int part2(String fileName) {
@@ -29,41 +30,33 @@ public class Day18 {
         return 0;
     }
 
-    private int calculate() {
+    private int calculate(Vault from) {
         int total = 0;
-        while (true) {
-            shortest();
-            int shortest = Integer.MAX_VALUE;
-            Vault closest = null;
-            for (Vault vault : vaults) {
-                if (vault.getAreaType() == Point.AreaType.KEY) {
-                    int distance = vault.getDistance();
-                    if (distance < shortest) {
-                        shortest = distance;
-                        closest = vault;
-                    }
-                    System.out.println("Vault " + vault + " is " + vault.getDistance());
+        shortest(from);
+        for (Vault key : vaults) {
+            if (key.getAreaType() == Point.AreaType.KEY) {
+                int distance = key.getDistance();
+                if (distance < Integer.MAX_VALUE) {
+                    System.out.println(key + " is " + key.getDistance() + " from " + from);
+                    key.open();
+                    openDoor(key);
+                    return calculate(key);
+                } else {
+                    System.out.println("far away " + key);
                 }
-            }
-            if (null != closest) {
-                total += shortest;
-                vaultMap[me.getX()][me.getY()] = '.';
-                vaultMap[closest.getX()][closest.getY()] = '@';
-                for (Vault vault : vaults) {
-                    if (vault.getAreaType() == Point.AreaType.DOOR && vault.getAssortment() == closest.getAssortment() - 32) {
-                        vault.open();
-                        vaultMap[vault.getX()][vault.getY()] = '.';
-                    }
-                }
-                me.swap(closest);
-                closest.open();
-                print();
-            } else {
-                System.out.println("No more path available");
-                break;
             }
         }
         return total;
+    }
+
+    private void openDoor(Vault key) {
+        for (Vault vault : vaults) {
+            if (vault.getAreaType() == Point.AreaType.DOOR && vault.getAssortment() == key.getAssortment() - 32) {
+                vault.open();
+                vaultMap[vault.getX()][vault.getY()] = '.';
+                return;
+            }
+        }
     }
 
     private void print() {
@@ -103,7 +96,7 @@ public class Day18 {
         }
     }
 
-    private void shortest() {
+    private void shortest(Vault from) {
         for (Vault vault : vaults) {
             vault.setDistance(Integer.MAX_VALUE);
             vault.setAdjacentNodes(new TreeMap<>());
@@ -118,6 +111,6 @@ public class Day18 {
                 }
             }
         }
-        Dijkstra.calculateShortestPathFromSource(me);
+        Dijkstra.calculateShortestPathFromSource(from);
     }
 }
