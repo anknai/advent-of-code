@@ -44,19 +44,10 @@ public class Board {
     }
 
     public int score(int number) {
-        int totalColumn = 0;
-        for (Set<Integer> column : columns) {
-            totalColumn += column.stream()
-                    .reduce(0, Integer::sum);
-        }
-        int totalRow = 0;
-        for (Set<Integer> row : rows) {
-            totalRow += row.stream()
-                    .reduce(0, Integer::sum);
-        }
-        if (totalColumn < totalRow) {
-            return totalColumn * number;
-        }
-        return totalRow * number;
+        int totalColumn = columns.stream().mapToInt(column -> column.stream()
+                .reduce(0, Integer::sum)).sum();
+        int totalRow = rows.stream().mapToInt(row -> row.stream()
+                .reduce(0, Integer::sum)).sum();
+        return totalColumn < totalRow ? totalColumn * number : totalRow * number;
     }
 }
