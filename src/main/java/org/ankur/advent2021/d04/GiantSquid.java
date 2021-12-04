@@ -1,13 +1,10 @@
 package org.ankur.advent2021.d04;
 
 import org.ankur.advent.util.FileReader;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.lang.Integer.parseInt;
@@ -50,24 +47,7 @@ public class GiantSquid {
     private List<Board> loadBoards(List<String> strings) {
         List<Board> boards = new ArrayList<>();
         for (int i = 2; i < strings.size(); i += 6) {
-            Board board = new Board();
-            for (int j = 0; j < 5; j++) {
-                Set<Integer> column = new HashSet<>();
-                board.addColumn(column);
-            }
-            for (int j = 0; j < 5; j++) {
-                String[] line = strings.get(i+j).split(" ");
-                Set<Integer> row = new HashSet<>();
-                int index = 0;
-                for (String s : line) {
-                    if (StringUtils.isNotBlank(s)) {
-                        int value = parseInt(s);
-                        row.add(value);
-                        board.addToColumn(index ++, value);
-                    }
-                }
-                board.addRow(row);
-            }
+            Board board = new Board(strings, i);
             boards.add(board);
         }
         return boards;
