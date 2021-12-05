@@ -39,31 +39,23 @@ public class Cloud {
             } else {
                 addVentX(y1, x2, x1);
             }
-        } else if (diagnoal) {
-            if (x1 == y1 && x2 == y2) {
-                if (x1 < x2) {
-                    addVentDiagonal(x1, x2);
-                } else {
-                    addVentDiagonal(x2, x1);
+        } else if (diagnoal && (Math.abs(x1 - x2) == Math.abs(y1 - y2))) {
+            int max = Math.abs(x1 - x2);
+            if (x1 > x2 && y1 < y2) {
+                for (int i = 0; i <= max; i++) {
+                    vents[x1 - i][y1 + i]++;
                 }
-            } else if (Math.abs(x1 - x2) == Math.abs(y1 - y2)) {
-                int max = Math.abs(x1 - x2);
-                if (x1 > x2 && y1 < y2) {
-                    for (int i = 0; i <= max; i++) {
-                        vents[x1 - i][y1 + i]++;
-                    }
-                } else if (x1 > x2) {
-                    for (int i = 0; i <= max; i++) {
-                        vents[x1 - i][y1 - i]++;
-                    }
-                } else if (y1 < y2) {
-                    for (int i = 0; i <= max; i++) {
-                        vents[x1 + i][y1 + i]++;
-                    }
-                } else {
-                    for (int i = 0; i <= max; i++) {
-                        vents[x1 + i][y1 - i]++;
-                    }
+            } else if (x1 > x2) {
+                for (int i = 0; i <= max; i++) {
+                    vents[x1 - i][y1 - i]++;
+                }
+            } else if (y1 < y2) {
+                for (int i = 0; i <= max; i++) {
+                    vents[x1 + i][y1 + i]++;
+                }
+            } else {
+                for (int i = 0; i <= max; i++) {
+                    vents[x1 + i][y1 - i]++;
                 }
             }
         }
@@ -78,12 +70,6 @@ public class Cloud {
     private void addVentX(int y, int from, int to) {
         for (int i = from; i <= to; i++) {
             vents[i][y]++;
-        }
-    }
-
-    private void addVentDiagonal(int from, int to) {
-        for (int i = from; i <= to; i++) {
-            vents[i][i]++;
         }
     }
 
