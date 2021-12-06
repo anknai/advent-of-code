@@ -41,22 +41,16 @@ public class Cloud {
             }
         } else if (diagnoal && (Math.abs(x1 - x2) == Math.abs(y1 - y2))) {
             int max = Math.abs(x1 - x2);
-            if (x1 > x2 && y1 < y2) {
-                for (int i = 0; i <= max; i++) {
-                    vents[x1 - i][y1 + i]++;
-                }
-            } else if (x1 > x2) {
-                for (int i = 0; i <= max; i++) {
-                    vents[x1 - i][y1 - i]++;
-                }
-            } else if (y1 < y2) {
-                for (int i = 0; i <= max; i++) {
-                    vents[x1 + i][y1 + i]++;
-                }
-            } else {
-                for (int i = 0; i <= max; i++) {
-                    vents[x1 + i][y1 - i]++;
-                }
+            int dx = 1;
+            int dy = 1;
+            if (x1 > x2) {
+                dx = -1;
+            }
+            if (y1 > y2) {
+                dy = -1;
+            }
+            for (int i = 0; i <= max; i++) {
+                vents[x1 + dx * i][y1 + dy * i]++;
             }
         }
     }
