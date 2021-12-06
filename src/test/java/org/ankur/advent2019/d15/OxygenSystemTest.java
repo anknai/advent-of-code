@@ -1,23 +1,23 @@
 package org.ankur.advent2019.d15;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class OxygenSystemTest extends OxygenSystem {
+class OxygenSystemTest extends OxygenSystem {
 
-    private final static String INPUT = "2019_15.txt";
-    private final static String INPUT_2 = "2019_15_02.txt";
+    private final static String INPUT = "archive/2019_15.txt";
+    private final static String INPUT_2 = "archive/2019_15_02.txt";
 
 
     @Test
-    public void distance() {
+    void distance() {
         assertEquals(216, super.distance(INPUT));
         assertEquals(240, super.distance(INPUT_2));
     }
 
     @Test
-    public void timeTaken() {
+    void timeTaken() {
         assertEquals(326, super.timeTaken(INPUT));
         assertEquals(322, super.timeTaken(INPUT_2));
     }

@@ -1,21 +1,21 @@
 package org.ankur.advent2019.d08;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SpaceImageFormatTest extends SpaceImageFormat {
+class SpaceImageFormatTest extends SpaceImageFormat {
 
-    private final static String TEST_INPUT = "2019_08.txt";
+    private final static String TEST_INPUT = "archive/2019_08.txt";
 
 
     @Test
-    public void readFile() {
+    void readFile() {
         assertEquals(2016, super.readFile(TEST_INPUT, 25, 6));
     }
 
     @Test
-    public void readFile2() {
+    void readFile2() {
         super.readFile2(TEST_INPUT, 25, 6);
     }
 }

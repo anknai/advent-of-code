@@ -1,16 +1,16 @@
 package org.ankur.advent2019.d12;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MoonWalker2Test extends MoonWalker2 {
+class MoonWalker2Test extends MoonWalker2 {
 
     @Test
-    public void walk1() {
+    void walk1() {
         List<Moon> moons = new ArrayList<>();
         moons.add(new Moon(-1, 0, 2));
         moons.add(new Moon(2, -10, -7));
@@ -21,7 +21,7 @@ public class MoonWalker2Test extends MoonWalker2 {
     }
 
     @Test
-    public void walk2() {
+    void walk2() {
         List<Moon> moons = new ArrayList<>();
         moons.add(new Moon(-7, 17, -11));
         moons.add(new Moon(9, 12, 5));

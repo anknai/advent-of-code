@@ -2,11 +2,11 @@ package org.ankur.advent2018.test;
 
 import org.ankur.advent2018.D23ExperimentalEmergencyTeleportation;
 import org.ankur.advent2018.domain.Bot;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class D23ExperimentalEmergencyTeleportationTest {
+class D23ExperimentalEmergencyTeleportationTest {
 
     private D23ExperimentalEmergencyTeleportation teleportation = new D23ExperimentalEmergencyTeleportation();
 
@@ -14,7 +14,7 @@ public class D23ExperimentalEmergencyTeleportationTest {
     private static final String INPUT = "23_bots.txt";
 
     @Test
-    public void max() {
+    void max() {
         int max = teleportation.max(TEST_INPUT);
         assertEquals(7, max);
 
@@ -23,7 +23,7 @@ public class D23ExperimentalEmergencyTeleportationTest {
     }
 
     @Test
-    public void closest() {
+    void closest() {
         int /*closest = teleportation.closest("23_test_2.txt");
         assertEquals(36, closest);*/
         closest = teleportation.closest(INPUT);
@@ -33,7 +33,7 @@ public class D23ExperimentalEmergencyTeleportationTest {
     }
 
     @Test
-    public void parse() {
+    void parse() {
         Bot bot = teleportation.parse("pos=<1,2,24>, r=15");
         assertEquals(1, bot.getX());
         assertEquals(2, bot.getY());

@@ -2,7 +2,7 @@ package org.ankur.advent2018.test;
 
 import org.ankur.advent2018.D24ImmuneSystemSimulator;
 import org.ankur.advent2018.domain.Group;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,15 +12,16 @@ import static org.ankur.advent2018.domain.Group.AttackType.COLD;
 import static org.ankur.advent2018.domain.Group.AttackType.FIRE;
 import static org.ankur.advent2018.domain.Group.AttackType.RADIATION;
 import static org.ankur.advent2018.domain.Group.AttackType.SLASHING;
-import static org.ankur.advent2018.domain.Group.GroupType.*;
-import static org.junit.Assert.assertEquals;
+import static org.ankur.advent2018.domain.Group.GroupType.IMMUNE_SYSTEM;
+import static org.ankur.advent2018.domain.Group.GroupType.INFECTION;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class D24ImmuneSystemSimulatorTest {
+class D24ImmuneSystemSimulatorTest {
 
     private D24ImmuneSystemSimulator simulator = new D24ImmuneSystemSimulator();
 
     @Test
-    public void winner() {
+    void winner() {
         Group group1 = Group.builder()
                 .name("S1")
                 .groupType(IMMUNE_SYSTEM)
@@ -83,7 +84,7 @@ public class D24ImmuneSystemSimulatorTest {
     }
 
     @Test
-    public void winner2() {
+    void winner2() {
         Group group1 = Group.builder()
                 .name("S1")
                 .groupType(IMMUNE_SYSTEM)
@@ -147,13 +148,13 @@ public class D24ImmuneSystemSimulatorTest {
 
 
     @Test
-    public void winnerInput() {
+    void winnerInput() {
         int winner = simulator.winner(immune(), infection());
         assertEquals(15470, winner);
     }
 
     @Test
-    public void winnerPart2() {
+    void winnerPart2() {
         int winner = simulator.part2(immune(), infection());
         assertEquals(5742, winner);
     }

@@ -1,11 +1,11 @@
 package org.ankur.advent2018.test;
 
 import org.ankur.advent2018.D05AlchemicalReduction;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class D05AlchemicalReductionTest {
+class D05AlchemicalReductionTest {
 
     private D05AlchemicalReduction reduction = new D05AlchemicalReduction();
 
@@ -13,18 +13,18 @@ public class D05AlchemicalReductionTest {
     private final static String INPUT = "05_polymer.txt";
 
     @Test
-    public void polymerUnits() {
+    void polymerUnits() {
         int polymerUnits = reduction.polymerUnits(TEST_INPUT);
-        assertEquals("Polymer units are ", 10, polymerUnits);
+        assertEquals(10, polymerUnits);
         polymerUnits = reduction.polymerUnits(INPUT);
-        assertEquals("Polymer units are ", 11546, polymerUnits);
+        assertEquals(11546, polymerUnits);
     }
 
     @Test
-    public void improvePolymer() {
+    void improvePolymer() {
         int polymerUnits = reduction.improvePolymer(TEST_INPUT);
-        assertEquals("Improved Polymer units are ", 4, polymerUnits);
+        assertEquals(4, polymerUnits);
         polymerUnits = reduction.improvePolymer(INPUT);
-        assertEquals("Polymer units are ", 5124, polymerUnits);
+        assertEquals(5124, polymerUnits);
     }
 }

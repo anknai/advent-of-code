@@ -1,11 +1,11 @@
 package org.ankur.advent2018.test;
 
 import org.ankur.advent2018.D18SettlersOfTheNorthPole;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class D18SettlersOfTheNorthPoleTest {
+class D18SettlersOfTheNorthPoleTest {
 
     private D18SettlersOfTheNorthPole northPole = new D18SettlersOfTheNorthPole();
 
@@ -13,19 +13,19 @@ public class D18SettlersOfTheNorthPoleTest {
     private static final String INPUT = "18_lumberyard.txt";
 
     @Test
-    public void area() {
+    void area() {
         int area = northPole.area(TEST_INPUT, 10);
-        assertEquals("Area is ", 1147, area);
+        assertEquals(1147, area);
         area = northPole.area(INPUT, 10);
-        assertEquals("Area is ", 675100, area);
+        assertEquals(675100, area);
 
     }
 
     @Test
-    public void areaAfterTooLong() {
+    void areaAfterTooLong() {
         int area = northPole.area(INPUT, 1000);
-        assertEquals("Area is ", 191820, area);
+        assertEquals(191820, area);
         area = northPole.area(INPUT, 468);
-        assertEquals("Area is ", 191820, area);
+        assertEquals(191820, area);
     }
 }

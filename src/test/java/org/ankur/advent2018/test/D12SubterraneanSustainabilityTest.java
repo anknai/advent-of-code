@@ -1,11 +1,11 @@
 package org.ankur.advent2018.test;
 
 import org.ankur.advent2018.D12SubterraneanSustainability;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class D12SubterraneanSustainabilityTest {
+class D12SubterraneanSustainabilityTest {
 
     private D12SubterraneanSustainability sustainability = new D12SubterraneanSustainability();
 
@@ -13,21 +13,21 @@ public class D12SubterraneanSustainabilityTest {
     private final static String INPUT = "12_plants.txt";
 
     @Test
-    public void potsWithPlants() {
+    void potsWithPlants() {
         int potsWithPlants = sustainability.potsWithPlants(TEST_INPUT, 20);
-        assertEquals("Pots with plants ", 325, potsWithPlants);
+        assertEquals(325, potsWithPlants);
 
         potsWithPlants = sustainability.potsWithPlants(INPUT, 20);
-        assertEquals("Pots with plants ", 3793, potsWithPlants);
+        assertEquals(3793, potsWithPlants);
     }
 
     @Test
-    public void potsAfterGenerations() {
+    void potsAfterGenerations() {
         long generations = 50_000_000_000L;
         long hugeNumber = sustainability.potsAfterGenerations(INPUT, generations);
-        assertEquals("Pots with plants ", 4_300_000_002_414L, hugeNumber);
+        assertEquals(4_300_000_002_414L, hugeNumber);
 
         hugeNumber = sustainability.potsAfterGenerations(TEST_INPUT, generations);
-        assertEquals("Pots with plants ", 999_999_999_374L, hugeNumber);
+        assertEquals(999_999_999_374L, hugeNumber);
     }
 }

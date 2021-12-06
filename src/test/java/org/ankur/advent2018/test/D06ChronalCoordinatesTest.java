@@ -2,11 +2,11 @@ package org.ankur.advent2018.test;
 
 import org.ankur.advent2018.D06ChronalCoordinates;
 import org.ankur.advent2018.domain.Coordinate;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class D06ChronalCoordinatesTest {
+class D06ChronalCoordinatesTest {
 
     private D06ChronalCoordinates chronalCoordinates = new D06ChronalCoordinates();
 
@@ -15,25 +15,25 @@ public class D06ChronalCoordinatesTest {
     private final static String INPUT = "06_chronal.txt";
 
     @Test
-    public void largestManhattan() {
+    void largestManhattan() {
         int i = chronalCoordinates.largestManhattan(TEST_INPUT);
-        assertEquals("Largest area is ", 17, i);
+        assertEquals(17, i);
 
         i = chronalCoordinates.largestManhattan(INPUT);
-        assertEquals("Largest area is ", 3358, i);
+        assertEquals(3358, i);
     }
 
     @Test
-    public void closestRegion() {
+    void closestRegion() {
         int i = chronalCoordinates.closestRegion(TEST_INPUT, 32);
-        assertEquals("Closest area is ", 16, i);
+        assertEquals(16, i);
 
         i = chronalCoordinates.closestRegion(INPUT, 10000);
-        assertEquals("Closest area is ", 45909, i);
+        assertEquals(45909, i);
     }
 
     @Test
-    public void parseCoordinate() {
+    void parseCoordinate() {
         Coordinate coordinate = chronalCoordinates.parseString("247, 302");
         System.out.println(coordinate);
     }

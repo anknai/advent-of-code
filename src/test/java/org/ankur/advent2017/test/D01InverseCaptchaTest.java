@@ -1,25 +1,25 @@
 package org.ankur.advent2017.test;
 
 import org.ankur.advent2017.D01InverseCaptcha;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class D01InverseCaptchaTest {
+class D01InverseCaptchaTest {
 
     private D01InverseCaptcha inverseCaptcha = new D01InverseCaptcha();
 
     private final static String INPUT = "2017_01_captcha.txt";
 
     @Test
-    public void captcha() {
+    void captcha() {
         int captcha = inverseCaptcha.captcha(INPUT);
-        assertEquals("Captcha is ", 1136, captcha);
+        assertEquals(1136, captcha);
     }
 
     @Test
-    public void halfwayCaptcha() {
+    void halfwayCaptcha() {
         int captcha = inverseCaptcha.halfwayCaptcha(INPUT);
-        assertEquals("Half way captcha is ", 1092, captcha);
+        assertEquals(1092, captcha);
     }
 }

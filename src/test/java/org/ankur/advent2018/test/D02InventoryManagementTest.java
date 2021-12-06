@@ -1,11 +1,11 @@
 package org.ankur.advent2018.test;
 
 import org.ankur.advent2018.D02InventoryManagement;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class D02InventoryManagementTest {
+class D02InventoryManagementTest {
 
     private D02InventoryManagement inventoryManagement = new D02InventoryManagement();
 
@@ -16,18 +16,18 @@ public class D02InventoryManagementTest {
     private final static String INPUT = "02_inventory.txt";
 
     @Test
-    public void checksum() {
+    void checksum() {
         int checksum = inventoryManagement.checksum(TEST_INPUT);
-        assertEquals("Checksum is ", 12, checksum);
+        assertEquals(12, checksum);
         checksum = inventoryManagement.checksum(INPUT);
-        assertEquals("Checksum is ", 5166, checksum);
+        assertEquals(5166, checksum);
     }
 
     @Test
-    public void closest() {
+    void closest() {
         String closest = inventoryManagement.closest(TEST_INPUT_2);
-        assertEquals("Closest is ", "fgij", closest);
+        assertEquals( "fgij", closest);
         closest = inventoryManagement.closest(INPUT);
-        assertEquals("Closest is ", "cypueihajytordkgzxfqplbwn", closest);
+        assertEquals("cypueihajytordkgzxfqplbwn", closest);
     }
 }

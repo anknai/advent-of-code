@@ -2,16 +2,16 @@ package org.ankur.advent2018.test;
 
 import org.ankur.advent.util.FileReader;
 import org.ankur.advent2018.D20RegularMap;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class D20RegularMapTest {
+class D20RegularMapTest {
 
     private D20RegularMap regularMap = new D20RegularMap();
 
     @Test
-    public void farthestRoom() {
+    void farthestRoom() {
         int distance = regularMap.farthestRoom("^WNE$");
         assertEquals(3, distance);
         distance = regularMap.farthestRoom("^ENWWW(NEEE|SSE(EE|N))$");
@@ -32,7 +32,7 @@ public class D20RegularMapTest {
     }
 
     @Test
-    public void roomsWithDistance() {
+    void roomsWithDistance() {
         int rooms = regularMap.roomWithDistance("^WNE$", 2);
         assertEquals(2, rooms);
         rooms = regularMap.roomWithDistance("^ENWWW(NEEE|SSE(EE|N))$", 5);
@@ -49,18 +49,18 @@ public class D20RegularMapTest {
     }
 
     @Test
-    public void branch() {
+    void branch() {
         char[] array = "^ENWWW(NEEE|SSE(EE|N))$".toCharArray();
         int matchingParen = regularMap.findClosingParen(array, 6);
-        assertEquals("Match is ", 21, matchingParen);
+        assertEquals(21, matchingParen);
 
         String[] matchingBrace = regularMap.matchingBrace("NEEE|SSE(EE|N)$");
-        assertEquals("Match is ", "EE|N", matchingBrace[0]);
-        assertEquals("Match is ", "$", matchingBrace[1]);
+        assertEquals("EE|N", matchingBrace[0]);
+        assertEquals("$", matchingBrace[1]);
 
         matchingBrace = regularMap.matchingBrace("^ENWWW(NEEE|SSE(EE|N))(EE)$");
-        assertEquals("Match is ", "NEEE|SSE(EE|N)", matchingBrace[0]);
-        assertEquals("Match is ", "(EE)$", matchingBrace[1]);
+        assertEquals("NEEE|SSE(EE|N)", matchingBrace[0]);
+        assertEquals("(EE)$", matchingBrace[1]);
 
         String[] branches = regularMap.splitBranches("NEEE|SSE(EE|N)|(EE)");
         assertEquals("NEEE", branches[0]);

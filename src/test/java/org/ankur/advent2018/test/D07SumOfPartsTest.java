@@ -2,11 +2,11 @@ package org.ankur.advent2018.test;
 
 import org.ankur.advent2018.D07SumOfParts;
 import org.ankur.advent2018.domain.Step;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class D07SumOfPartsTest {
+class D07SumOfPartsTest {
 
     private D07SumOfParts sumOfParts = new D07SumOfParts();
 
@@ -15,25 +15,25 @@ public class D07SumOfPartsTest {
     private final static String INPUT = "07_steps.txt";
 
     @Test
-    public void sequence() {
+    void sequence() {
         String sequence = sumOfParts.sequence(TEST_INPUT);
-        assertEquals("Sequence is ", "CABDFE", sequence);
+        assertEquals("CABDFE", sequence);
         sequence = sumOfParts.sequence(INPUT);
-        assertEquals("Sequence is ", "GKCNPTVHIRYDUJMSXFBQLOAEWZ", sequence);
+        assertEquals("GKCNPTVHIRYDUJMSXFBQLOAEWZ", sequence);
     }
 
     @Test
-    public void timeTaken() {
+    void timeTaken() {
         int timeTaken = sumOfParts.timeTaken(TEST_INPUT, 2, 0);
-        assertEquals("Time taken is ", 15, timeTaken);
+        assertEquals(15, timeTaken);
 
         timeTaken = sumOfParts.timeTaken(INPUT, 5, 60);
-        assertEquals("Time taken is ", 1265, timeTaken);
+        assertEquals(1265, timeTaken);
     }
 
     @Test
-    public void parse() {
+    void parse() {
         Step step = sumOfParts.parseInstruction("Step C must be finished before step A can begin.");
-        assertEquals("Step is ", "A\tC ", step.toString());
+        assertEquals("A\tC ", step.toString());
     }
 }

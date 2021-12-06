@@ -1,27 +1,27 @@
 package org.ankur.advent2019.d05;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AsteroidChanceTest extends AsteroidChance {
+class AsteroidChanceTest extends AsteroidChance {
 
-    private static final String INPUT = "2019_05.txt";
+    private static final String INPUT = "archive/2019_05.txt";
 
     @Test
-    public void run() {
+    void run() {
         assertEquals(5, super.run("3,0,4,0,99", 5));
         assertEquals(5, super.run("1002,4,3,4,33", 5));
     }
 
     @Test
-    public void code() {
+    void code() {
         assertEquals(13978427, super.code(INPUT, 1));
         assertEquals(11189491, super.code(INPUT, 5));
     }
 
     @Test
-    public void run2() {
+    void run2() {
         assertEquals(1, super.run("3,9,8,9,10,9,4,9,99,-1,8", 8));
         assertEquals(0, super.run("3,9,8,9,10,9,4,9,99,-1,8", 7));
         assertEquals(1, super.run("3,9,7,9,10,9,4,9,99,-1,8", 6));

@@ -1,11 +1,11 @@
 package org.ankur.advent2018.test;
 
 import org.ankur.advent2018.D19GoWithTheFlow;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class D19GoWithTheFlowTest {
+class D19GoWithTheFlowTest {
 
     private D19GoWithTheFlow flow = new D19GoWithTheFlow();
 
@@ -13,15 +13,15 @@ public class D19GoWithTheFlowTest {
     private static final String INPUT = "19_instructions.txt";
 
     @Test
-    public void part1() {
+    void part1() {
         int i = flow.part1(TEST_INPUT, false, 100_000);
-        assertEquals("Register 0 has ", 6, i);
+        assertEquals( 6, i);
         i = flow.part1(INPUT, false,10_000_000);
-        assertEquals("Register 0 has ", 2223, i);
+        assertEquals( 2223, i);
     }
 
     @Test
-    public void part2() {
+    void part2() {
         flow.part1(INPUT, true,1_000_000_000);
         //Look for the pattern when register 0's value is changing.
         //10551282 = 1 * 2 * 3 * 7 * 251221

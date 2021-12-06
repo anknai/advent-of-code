@@ -1,15 +1,15 @@
 package org.ankur.advent2018.test;
 
 import org.ankur.advent2018.D22ModeMaze;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class D22ModeMazeTest {
+class D22ModeMazeTest {
     private D22ModeMaze maze = new D22ModeMaze();
 
     @Test
-    public void getRiskLevel() throws Exception {
+    void getRiskLevel() {
         int riskLevel = maze.getRiskLevel(510, 10, 10);
         assertEquals(114, riskLevel);
 
@@ -18,7 +18,7 @@ public class D22ModeMazeTest {
     }
 
     @Test
-    public void getShortestPath() throws Exception {
+    void getShortestPath() {
         int shortestPath = maze.getShortestPath(510, 10, 10);
         assertEquals(45, shortestPath);
 

@@ -2,11 +2,11 @@ package org.ankur.advent2018.test;
 
 import org.ankur.advent2018.D03FabricSlicer;
 import org.ankur.advent2018.domain.FabricSlice;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class D03FabricSlicerTest {
+class D03FabricSlicerTest {
     private D03FabricSlicer slicer = new D03FabricSlicer();
 
     private final static String TEST_INPUT = "03_test.txt";
@@ -14,23 +14,23 @@ public class D03FabricSlicerTest {
     private final static String INPUT = "03_fabric.txt";
 
     @Test
-    public void overlappedClaims() {
+    void overlappedClaims() {
         int overlappedArea = slicer.overlappedArea(TEST_INPUT);
-        assertEquals("Overlapped area is ", 4, overlappedArea);
+        assertEquals(4, overlappedArea);
         overlappedArea = slicer.overlappedArea(INPUT);
-        assertEquals("Overlapped area is ", 100595, overlappedArea);
+        assertEquals(100595, overlappedArea);
     }
 
     @Test
-    public void noOverlappedClaims() {
+    void noOverlappedClaims() {
         int noOverlappedClaim = slicer.noOverlappedClaim(TEST_INPUT);
-        assertEquals("Overlapped area is ", 3, noOverlappedClaim);
+        assertEquals(3, noOverlappedClaim);
         noOverlappedClaim = slicer.noOverlappedClaim(INPUT);
-        assertEquals("Overlapped area is ", 415, noOverlappedClaim);
+        assertEquals(415, noOverlappedClaim);
     }
 
     @Test
-    public void getFabricSlicer() {
+    void getFabricSlicer() {
         FabricSlice fabricSlice = slicer.getFabricSlice("#1 @ 338,764: 20x24");
         assertEquals(1, fabricSlice.getClaimer());
         assertEquals(338, fabricSlice.getLeft());

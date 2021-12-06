@@ -2,8 +2,6 @@ package org.ankur.advent2021.d06;
 
 import org.ankur.advent.util.FileReader;
 
-import java.util.Arrays;
-
 public class LanternFish {
 
     public long solve(String input, int round) {
@@ -14,7 +12,6 @@ public class LanternFish {
         for (String s : thisLine) {
             countOnDay[Integer.parseInt(s)]++;
         }
-        Arrays.stream(countOnDay).forEach(System.out::println);
 
         for(int i = 0; i < round; i++){
             original = countOnDay[0];

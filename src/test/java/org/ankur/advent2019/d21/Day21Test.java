@@ -1,20 +1,20 @@
 package org.ankur.advent2019.d21;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Day21Test extends Day21 {
+class Day21Test extends Day21 {
 
-    private final static String INPUT = "2019_21.txt";
+    private final static String INPUT = "archive/2019_21.txt";
 
     @Test
-    public void testPart1() {
+    void testPart1() {
         assertEquals(80, super.part1(INPUT));
     }
 
     @Test
-    public void testPart2() {
+    void testPart2() {
         assertEquals(80, super.part2(INPUT));
     }
 }
