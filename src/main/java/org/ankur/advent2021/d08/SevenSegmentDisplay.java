@@ -41,42 +41,34 @@ public class SevenSegmentDisplay {
                     throw new IllegalStateException("Unexpected value: " + length);
             }
         }
+
         //9 has two more characters then 4
-        char[] four = number.get(4).toCharArray();
-        for (String six : sixes) {
-            String nine = six;
-            for (char c : four) {
-                if (six.indexOf(c) == -1) {
-                    nine = null;
-                    break;
-                }
-            }
-            if (null != nine) {
-                number.set(9, six);
+        String four = number.get(4);
+        for (String nine : sixes) {
+            if (contains(four, nine)) {
+                number.set(9, nine);
+                break;
             }
         }
         sixes.remove(number.get(9));
 
         //3 & 5 have one character less than 9, so gives us 2
         String nine = number.get(9);
-        for (String five : fives) {
-            char[] fivec = five.toCharArray();
-            for (char c : fivec) {
-                if (nine.indexOf(c) == -1) {
-                    number.set(2, five);
-                    break;
-                }
+        for (String two : fives) {
+            if (!contains(two, nine)) {
+                number.set(2, two);
+                break;
             }
         }
         fives.remove(number.get(2));
 
         //6 has one character removed then 5
-        for (String six : sixes) {
+        outer: for (String six : sixes) {
             for (String five : fives) {
                 if (contains(five, six)) {
                     number.set(5, five);
                     number.set(6, six);
-                    break;
+                    break outer;
                 }
             }
         }
@@ -107,21 +99,13 @@ public class SevenSegmentDisplay {
     }
 
     private String find(String string) {
-        char[] chars = string.toCharArray();
         int length = string.length();
         for (int i = 0, numbersSize = number.size(); i < numbersSize; i++) {
             String str = number.get(i);
             if (length != str.length()) {
                 continue;
             }
-            boolean found = true;
-            for (char c : chars) {
-                if (str.indexOf(c) == -1) {
-                    found = false;
-                    break;
-                }
-            }
-            if (found) {
+            if (contains(string, str)) {
                 return "" + i;
             }
         }
