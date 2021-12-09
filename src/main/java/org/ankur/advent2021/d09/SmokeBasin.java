@@ -47,4 +47,34 @@ public class SmokeBasin {
         Integer total = integers.stream().reduce(0, Integer::sum);
         return total + integers.size();
     }
+
+    public int basin(String input) {
+        List<String> strings = FileReader.readFile(input);
+        int width = strings.get(0).length();
+        int height = strings.size();
+        CaveSystem system = new CaveSystem(width, height);
+        for (int y = 0; y < height; y++) {
+            String string = strings.get(y);
+            char[] chars = string.toCharArray();
+            for (int x = 0; x < width; x++) {
+                char c = chars[x];
+                system.addCave(x, y, c - '0');
+            }
+        }
+        List<Integer> basins = system.findBasins();
+        basins.sort(Integer::compareTo);
+        int size = basins.size();
+        if (size >= 3) {
+            System.out.println("Largest basins are");
+            int total = 1;
+            for (int i = size - 1; i > size - 4; i--) {
+                System.out.println(basins.get(i));
+                total *= basins.get(i);
+            }
+            System.out.println(total);
+            return total;
+        } else {
+            return -1;
+        }
+    }
 }

@@ -14,4 +14,10 @@ class SmokeBasinTest extends SmokeBasin {
         assertEquals(15, super.low(TEST_INPUT));
         assertEquals(539, super.low(MAIN_INPUT));
     }
+
+    @Test
+    void testBasin() {
+        assertEquals(1134, super.basin(TEST_INPUT));
+        assertEquals(736920, super.basin(MAIN_INPUT));
+    }
 }
