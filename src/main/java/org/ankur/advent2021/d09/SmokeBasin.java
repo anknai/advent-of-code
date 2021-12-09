@@ -5,6 +5,10 @@ import org.ankur.advent.util.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Interesting problem with loops and recursion
+ * Part 2 is quite different then 1
+ */
 public class SmokeBasin {
     public int low(String input) {
         List<String> strings = FileReader.readFile(input);
