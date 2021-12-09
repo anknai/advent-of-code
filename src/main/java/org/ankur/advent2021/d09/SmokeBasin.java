@@ -64,6 +64,7 @@ public class SmokeBasin {
                 char c = chars[x];
                 system.addCave(x, y, c - '0');
             }
+            System.out.println();
         }
         List<Integer> basins = system.findBasins();
         basins.sort(Integer::compareTo);

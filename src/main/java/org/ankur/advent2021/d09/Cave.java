@@ -14,12 +14,15 @@ public class Cave {
 
     private boolean tagged;
 
-    public Cave(int x, int y, int value) {
+    public Cave(int x, int y, int height) {
         this.x = x;
         this.y = y;
-        this.value = value;
-        if (value == 9) {
+        this.value = height;
+        char print = ' ';
+        if (height == 9) {
             terminal = true;
+            print = '█';
         }
+        System.out.print(print);
     }
 }

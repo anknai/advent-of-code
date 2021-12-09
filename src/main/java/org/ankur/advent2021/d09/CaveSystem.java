@@ -24,12 +24,12 @@ public class CaveSystem {
         this.height = height;
     }
 
-    public void addCave(Cave cave) {
+    private void addCave(Cave cave) {
         caves.put(getIndex(cave), cave);
     }
 
-    public void addCave(int x, int y, int value) {
-        addCave(new Cave(x, y, value));
+    public void addCave(int x, int y, int height) {
+        addCave(new Cave(x, y, height));
     }
 
     public Optional<Cave> getCave(int x, int y) {
