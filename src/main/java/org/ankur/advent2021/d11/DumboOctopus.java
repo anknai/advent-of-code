@@ -12,7 +12,7 @@ public class DumboOctopus {
         for (int i = 0; i < charges; i++) {
             total += cavern.charge();
         }
-        cavern.print();
+        cavern.display();
         return total;
     }
 
@@ -24,7 +24,7 @@ public class DumboOctopus {
             total++;
             flashed = cavern.flashAll();
         }
-        cavern.print();
+        cavern.display();
         return total;
     }
 

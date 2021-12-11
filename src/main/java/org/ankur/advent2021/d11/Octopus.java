@@ -1,16 +1,18 @@
 package org.ankur.advent2021.d11;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
 public class Octopus {
 
-    private int x;
+    private final int x;
 
-    private int y;
+    private final int y;
 
     private int energy;
 
+    @Setter
     private boolean flashed;
 
     public Octopus(int x, int y, int energy) {

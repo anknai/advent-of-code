@@ -50,14 +50,14 @@ public class Cavern {
         int flashes = integers.stream()
                 .map(octopusMap::get)
                 .filter(octopus -> !octopus.isFlashed() && octopus.getEnergy() > 9)
-                .mapToInt(octopus -> charge(octopus.getX(), octopus.getY()))
+                .mapToInt(octopus -> flash(octopus.getX(), octopus.getY()))
                 .sum();
 
         integers.stream().map(octopusMap::get).forEach(Octopus::reset);
         return flashes;
     }
 
-    private int charge(int x, int y) {
+    private int flash(int x, int y) {
         Optional<Octopus> optional = getOctopus(x, y);
         if (!optional.isPresent()) {
             return 0;
@@ -66,13 +66,13 @@ public class Cavern {
         octopus.charge();
         if (!octopus.isFlashed() && octopus.getEnergy() > 9) {
             octopus.setFlashed(true);
-            return 1 + charge(x - 1, y) + charge(x + 1, y) + charge(x, y - 1) + charge(x, y + 1)
-                    + charge(x -1 , y -1) + charge(x + 1 , y + 1) + charge(x -1 , y + 1) + charge(x + 1 , y - 1);
+            return 1 + flash(x - 1, y) + flash(x + 1, y) + flash(x, y - 1) + flash(x, y + 1)
+                    + flash(x - 1 , y - 1) + flash(x + 1 , y + 1) + flash(x - 1 , y + 1) + flash(x + 1 , y - 1);
         }
         return 0;
     }
 
-    public void print() {
+    public void display() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Octopus octopus = octopusMap.get(getIndex(x, y));
