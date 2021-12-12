@@ -17,7 +17,7 @@ class PassagePathingTest extends PassagePathing {
 
     @Test
     void testPath2() {
-        assertEquals(103, super.paths2(TEST_INPUT));
-        assertEquals(3679, super.paths2(MAIN_INPUT));
+        assertEquals(36, super.paths2(TEST_INPUT));
+        assertEquals(107395, super.paths2(MAIN_INPUT));
     }
 }

@@ -17,7 +17,11 @@ public class Cave {
     private boolean isMajor;
 
     public void setTraversed(boolean traversed) {
-        traverseCount++;
+        if (traversed) {
+            traverseCount++;
+        } else {
+            traverseCount--;
+        }
         this.traversed = traversed;
     }
 
@@ -52,8 +56,14 @@ public class Cave {
         return !isMajor && traversed;
     }
 
-    public boolean isNotTraversedTwice() {
-        return !isMajor && traverseCount < 2;
+    public boolean isTwiceTraversed() {
+        if (isMajor) {
+            return false;
+        }
+        if ((isStart || isEnd) && isTraversed()) {
+            return true;
+        }
+        return traverseCount > 1;
     }
 
     @Override

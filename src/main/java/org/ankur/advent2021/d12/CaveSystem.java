@@ -1,20 +1,21 @@
 package org.ankur.advent2021.d12;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
+import java.util.Set;
 
 public class CaveSystem {
 
     private final Map<String, Cave> caves = new HashMap<>();
 
-    private Cave start;
-
     private int total = 0;
 
-    private Stack<List<String>> paths = new Stack<>();
+    private final Deque<List<String>> paths = new ArrayDeque<>();
 
     public void addCave(String string) {
         String[] split = string.split("-");
@@ -26,14 +27,6 @@ public class CaveSystem {
         to = caves.get(to.getName());
         to.addNeighbour(from);
         from.addNeighbour(to);
-        setStart(from);
-        setStart(to);
-    }
-
-    private void setStart(Cave cave) {
-        if (cave.isStart()) {
-            start = cave;
-        }
     }
 
     public void display() {
@@ -45,7 +38,7 @@ public class CaveSystem {
         List<String> path = new ArrayList<>();
         path.add("start");
         paths.push(path);
-        while (!paths.empty()) {
+        while (!paths.isEmpty()) {
             path = paths.pop();
             resetTraversed(path);
             find(last(path), path);
@@ -100,7 +93,7 @@ public class CaveSystem {
         List<String> path = new ArrayList<>();
         path.add("start");
         paths.push(path);
-        while (!paths.empty()) {
+        while (!paths.isEmpty()) {
             path = paths.pop();
             resetTraversed(path);
             find2(last(path), path);
@@ -111,19 +104,37 @@ public class CaveSystem {
     private void find2(Cave cave, List<String> path) {
         if (cave.isEnd()) {
             cave.setTraversed(true);
-            total++;
-            System.out.println("Path " + display(path));
+            if (isNotTwiceTraversed(path)) {
+                total++;
+            }
             return;
         }
-        if (!cave.isNotTraversedTwice()) {
+        if (isNotTwiceTraversed(path)) {
             cave.setTraversed(true);
             for (Cave n : cave.getNeighbours()) {
-                if (!n.isNotTraversedTwice()) {
+                if (!n.isTwiceTraversed()) {
                     copyAndPush(path, n.getName());
                 }
             }
-            List<String> peek = paths.pop();
-            find2(last(peek), peek);
+            List<String> pop = paths.pop();
+            find2(last(pop), pop);
         }
+    }
+
+    private boolean isNotTwiceTraversed(List<String> path) {
+        Set<String> twice = new HashSet<>();
+        boolean found = false;
+        for (String s : path) {
+            if (caves.get(s).isTwiceTraversed()) {
+                boolean add = twice.add(s);
+                if (!add && found) {
+                    return false;
+                }
+                if (!add) {
+                    found = true;
+                }
+            }
+        }
+        return true;
     }
 }
