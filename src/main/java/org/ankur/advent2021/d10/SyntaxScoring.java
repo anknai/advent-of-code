@@ -5,6 +5,10 @@ import org.ankur.advent.util.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Complexity: Simple
+ * Stack
+ */
 public class SyntaxScoring {
 
     public int score(String input) {

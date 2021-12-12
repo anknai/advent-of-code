@@ -4,6 +4,11 @@ import org.ankur.advent.util.FileReader;
 
 import java.util.List;
 
+/**
+ * Complexity: Medium
+ * Recursive search
+ * Object oriented
+ */
 public class DumboOctopus {
 
     public int flashes(String input, int charges) {

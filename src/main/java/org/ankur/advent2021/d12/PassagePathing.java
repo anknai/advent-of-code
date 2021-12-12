@@ -4,6 +4,11 @@ import org.ankur.advent.util.FileReader;
 
 import java.util.List;
 
+/**
+ * Complexity: Very Complex
+ * Depth first search for graph
+ * Object oriented
+ */
 public class PassagePathing {
 
     public int paths(String input) {
