@@ -6,6 +6,11 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Loops and indexes
+ * Manual observation for second part
+ * Complexity: Simple to Medium
+ */
 public class TransparentOrigami {
 
     private int[][] origami;
@@ -58,9 +63,7 @@ public class TransparentOrigami {
                 origami[x][y] = 0;
             }
         }
-        for (Dot dot : dots) {
-            origami[dot.getX()][dot.getY()] = 1;
-        }
+        dots.forEach(dot -> origami[dot.getX()][dot.getY()] = 1);
         folds = new ArrayList<>();
         for (int i = foldStartsHere + 1; i < stringsSize; i++) {
             String s = strings.get(i);
@@ -74,9 +77,9 @@ public class TransparentOrigami {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (origami[x][y] == 1) {
-                    System.out.print('#');
+                    System.out.print('█');
                 } else {
-                    System.out.print('.');
+                    System.out.print(' ');
                 }
             }
             System.out.println();
